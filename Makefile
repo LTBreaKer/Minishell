@@ -1,6 +1,6 @@
 NAME = minishell
 
-CFLAGS = -Wall -Wextra -Werror #-lreadline
+CFLAGS = -Wall -Wextra -Werror -g #-lreadline
 
 RM = rm -f
 
@@ -20,7 +20,9 @@ SR =	echo.c		\
 			cd.c			\
 			env.c			\
 			export.c	\
+			unset.c		\
 			ft_lst.c	\
+			err.c			\
 			execution.c	\
 
 SRCS = $(addprefix ${SR_PATH}, ${SR})

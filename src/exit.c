@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 18:05:14 by aharrass          #+#    #+#             */
-/*   Updated: 2023/02/25 18:40:27 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/03 00:53:57 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,5 @@
 void	ft_exit(void)
 {
 	ft_putendl_fd("exit", 1);
-	exit(0);
+	exit(g_env.status);
 }

@@ -6,7 +6,7 @@
 #    By: aharrass <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/06 20:48:11 by aharrass          #+#    #+#              #
-#    Updated: 2023/01/11 02:57:57 by aharrass         ###   ########.fr        #
+#    Updated: 2023/03/04 10:58:46 by aharrass         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRCS	=	ft_isalpha.c		\
 				ft_strrchr.c		\
 				ft_memset.c			\
 				ft_strncmp.c		\
+				ft_strcmp.c			\
 				ft_atoi.c				\
 				ft_strlcat.c		\
 				ft_strlcpy.c		\
