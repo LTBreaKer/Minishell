@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:25:21 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/05 10:37:11 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/06 18:58:48 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ char	*get_cmd(t_cmd *cmd)
 	int		i;
 
 	i = 0;
-	if (access(cmd, F_OK) == 0)
-		return (cmd);
+	if (access(cmd->cmd, F_OK) == 0)
+		return (cmd->cmd);
 	tmp = ft_get_value("PATH");
 	if (!tmp)
 		return (NULL);
@@ -82,7 +82,7 @@ char	*get_cmd(t_cmd *cmd)
 	while (paths[i])
 	{
 		cmd_path = ft_strjoin(paths[i++], "/");
-		cmd_path = ft_strjoin(cmd_path, cmd);
+		cmd_path = ft_strjoin(cmd_path, cmd->cmd);
 		if (access(cmd_path, F_OK) == 0)
 			break ;
 		free(cmd_path);
@@ -96,7 +96,7 @@ char	*get_cmd(t_cmd *cmd)
 	return (NULL);
 }
 
-void	ft_execute(t_cmd *cmd, char **envp)
+int	ft_execute(t_cmd *cmd, char **envp)
 {
 	int cmd_count;
 	int **pipes;
@@ -105,18 +105,18 @@ void	ft_execute(t_cmd *cmd, char **envp)
 	char *cmd_path;
 	
 	i = 0;
-	cmd_count = count_cmds(cmd);
+	cmd_count = count_cmd(cmd);
 	pipes = make_pipes(cmd_count);
 	if (!pipes)
-		return ;
+		return (1);
 	pid = malloc(sizeof(int) * cmd_count);
 	if (!pid)
-		return (perror("malloc"), NULL);
+		return (perror("malloc"), 1);
 	while (cmd)
 	{
 		pid[i] = fork();
 		if (pid[i] == -1)
-			return (perror("fork"), NULL);
+			return (perror("fork"), 1);
 		if (pid[i] == 0)
 		{
 			if (cmd->in == -1 || cmd->out == -1 || cmd->err == -1)

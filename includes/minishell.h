@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 15:01:31 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/05 09:01:10 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/06 18:56:23 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,6 @@ struct				s_env
 	t_env			*env;
 	t_export		*export;
 };
-
-typedef struct s_var
-{
-	int				**fd;
-}					t_var;
 
 typedef struct s_cmd
 {
