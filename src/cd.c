@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 18:06:02 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/04 10:17:42 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/09 16:19:44 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	ft_cd(char *dir)
 {
 	char	*pwd;
 
+	
 	if (dir)
 		dir = ft_strtrim(dir, " ");
 	if (!dir)
@@ -65,5 +66,6 @@ int	ft_cd(char *dir)
 	ft_putendl_fd(pwd, 1);
 	free(pwd);
 	free(dir);
+	
 	return (0);
 }

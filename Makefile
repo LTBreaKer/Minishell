@@ -1,6 +1,6 @@
 NAME = minishell
 
-CFLAGS = -Wall -Wextra -Werror -g #-lreadline
+CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address #-lreadline
 
 RM = rm -f
 
@@ -23,8 +23,15 @@ SR =	echo.c		\
 			unset.c		\
 			ft_lst.c	\
 			err.c			\
+			exit.c		\
 			execution.c	\
-
+			pars_fill_list.c	\
+			pars_lexer.c	\
+			pars_lexer_utils.c	\
+			pars_stack_func.c	\
+			pars_syntax_error.c	\
+			pars_main.c	\
+			
 SRCS = $(addprefix ${SR_PATH}, ${SR})
 
 OBJS = $(addprefix ${OB_PATH}, ${SR:.c=.o})
@@ -37,7 +44,7 @@ ${OB_PATH}%.o	:	${SR_PATH}%.c
 
 ${NAME}	:	${OBJS}
 	make -C ${LIBFT}
-	cc ${CFLAGS} ${INCLUDE} -o ${NAME} ${OBJS} ${LIBFT_AR}
+	cc ${CFLAGS} ${INCLUDE} -o ${NAME} ${OBJS} ${LIBFT_AR} -lreadline
 
 clean:
 			make clean -C ${LIBFT}

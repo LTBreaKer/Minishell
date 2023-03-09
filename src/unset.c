@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 10:23:55 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/04 12:03:15 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/09 09:35:55 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,20 @@ int	ft_check_name1(char *var)
 	return (0);
 }
 
-int	ft_unset(char *elem)
+int	ft_unset(char **args)
 {
-	if (ft_check_name1(elem))
-		return (1);
-	ft_env_remove(&g_env.env, elem);
-	ft_lstremove(&g_env.export, elem);
+	int		i;
+
+	i = 1;
+	if (args[1] == NULL)
+		return (0);
+	while (args[i])
+	{
+		if (ft_check_name1(args[i]))
+			return (1);
+		ft_env_remove(&g_env.env, args[i]);
+		ft_lstremove(&g_env.export, args[i]);
+		i++;
+	}
 	return (0);
 }

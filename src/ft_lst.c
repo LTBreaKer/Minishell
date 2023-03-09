@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 16:14:11 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/05 04:55:43 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/09 15:37:52 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_env	*ft_lstnew(char *var, int f)
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
-	tmp = ft_split(var, '=');
+	tmp = get_var(var);
 	if (f == 1)
 		free(var);
 	if (tmp[0][ft_strlen(tmp[0]) - 1] == '+')
@@ -105,7 +105,7 @@ void	ft_env_remove(t_env **env, char *var)
 		return ;
 	tmp = *env;
 	tmp2 = NULL;
-	if (ft_strcmp(tmp->var, var) == 0)
+	if (ft_strcmp2(tmp->var, var) == 0)
 	{
 		*env = tmp->next;
 		free(tmp->var);
@@ -113,11 +113,11 @@ void	ft_env_remove(t_env **env, char *var)
 		free(tmp);
 		return ;
 	}
-	if (tmp->next && ft_strcmp(tmp->next->var, var) != 0)
+	if (tmp->next && ft_strcmp2(tmp->next->var, var) != 0)
 		tmp = tmp->next;
 	while (tmp && tmp->next)
 	{
-		if (ft_strcmp(tmp->next->var, var) == 0)
+		if (ft_strcmp2(tmp->next->var, var) == 0)
 		{
 			tmp2 = tmp->next;
 			tmp->next = tmp->next->next;
@@ -139,18 +139,18 @@ void	ft_lstremove(t_export **export, char *var)
 		return ;
 	tmp = *export;
 	tmp2 = NULL;
-	if (ft_strcmp(tmp->var, var) == 0)
+	if (ft_strcmp2(tmp->var, var) == 0)
 	{
 		*export = tmp->next;
 		free(tmp->var);
 		free(tmp);
 		return ;
 	}
-	if (tmp->next && ft_strcmp(tmp->next->var, var) != 0)
+	if (tmp->next && ft_strcmp2(tmp->next->var, var) != 0)
 		tmp = tmp->next;
 	while (tmp && tmp->next)
 	{
-		if (ft_strcmp(tmp->next->var, var) == 0)
+		if (ft_strcmp2(tmp->next->var, var) == 0)
 		{
 			tmp2 = tmp->next;
 			tmp->next = tmp->next->next;
@@ -168,7 +168,7 @@ int	ft_change_elem(char *var, char *value)
 	tmp = g_env.env;
 	while (tmp)
 	{
-		if (ft_strcmp(tmp->var, var) == 0)
+		if (ft_strcmp2(tmp->var, var) == 0)
 		{
 			free(tmp->value);
 			tmp->value = ft_strdup(value);
@@ -186,7 +186,7 @@ char *ft_get_value(char *var)
 	tmp = g_env.env;
 	while (tmp)
 	{
-		if (ft_strcmp(tmp->var, var) == 0)
+		if (ft_strcmp2(tmp->var, var) == 0)
 			return (tmp->value);
 		tmp = tmp->next;
 	}

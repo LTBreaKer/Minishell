@@ -1,35 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_strjoin3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/07 00:10:14 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/09 15:56:04 by aharrass         ###   ########.fr       */
+/*   Created: 2023/03/09 15:29:32 by aharrass          #+#    #+#             */
+/*   Updated: 2023/03/09 15:33:19 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
 
-size_t	ft_strlen(const char *s)
+#include "libft.h"
+
+char	*ft_strjoin3(char *s1, char *s2)
 {
-	size_t	i;
+	char	*strfinal;
+	int		i;
 
 	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-
-size_t	ft_double_strlen(char **s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i] != NULL)
+	if (!s1 || !s2)
+		return (NULL);
+	strfinal = malloc(sizeof (char) * (ft_strlen(s1) + ft_strlen(s2)) + 1);
+	if (!strfinal)
+		return (NULL);
+	while (s1[i] != '\0')
 	{
+		strfinal[i] = s1[i];
 		i++;
 	}
-	return (i);
+	while (*s2)
+	{
+		strfinal[i] = *s2;
+		s2++;
+		i++;
+	}
+	strfinal[i] = '\0';
+	free(s1);
+	return (strfinal);
 }

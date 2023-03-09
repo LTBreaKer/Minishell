@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:25:21 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/06 18:58:48 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/09 15:48:35 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 void	make_env(char **envp)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	
 	if (*envp)
 	{
 		g_env.env = ft_lstnew(envp[i++], 0);
@@ -44,9 +43,9 @@ void	make_env(char **envp)
 
 int	**make_pipes(int cmd_count)
 {
-	int **pipes;
-	int i;
-	
+	int	**pipes;
+	int	i;
+
 	i = 0;
 	pipes = malloc(sizeof(int *) * cmd_count - 1);
 	if (!pipes)
@@ -65,9 +64,9 @@ int	**make_pipes(int cmd_count)
 
 char	*get_cmd(t_cmd *cmd)
 {
-	char *cmd_path;
-	char *tmp;
-	char **paths;
+	char	*cmd_path;
+	char	*tmp;
+	char	**paths;
 	int		i;
 
 	i = 0;
@@ -96,14 +95,35 @@ char	*get_cmd(t_cmd *cmd)
 	return (NULL);
 }
 
+void	built_in(t_cmd *cmd)
+{
+	if (ft_strncmp(cmd->args[0], "echo", 4) == 0 && cmd->args[0][4] == '\0')
+		ft_echo(cmd);
+	else if (ft_strncmp(cmd->args[0], "cd", 2) == 0 && cmd->args[0][2] == '\0')
+		ft_cd(cmd->args[1]);
+	else if (ft_strncmp(cmd->args[0], "pwd", 3) == 0 && cmd->args[0][3] == '\0')
+		ft_pwd();
+	else if (ft_strncmp(cmd->args[0], "export", 6) == 0
+			&& cmd->args[0][6] == '\0')
+		ft_export(cmd->args);
+	else if (ft_strncmp(cmd->args[0], "unset", 5) == 0
+			&& cmd->args[0][5] == '\0')
+		ft_unset(cmd->args);
+	else if (ft_strncmp(cmd->args[0], "env", 3) == 0 && cmd->args[0][3] == '\0')
+		ft_env();
+	else if (ft_strncmp(cmd->args[0], "exit", 4) == 0
+			&& cmd->args[0][4] == '\0')
+		ft_exit(cmd->args);
+}
+
 int	ft_execute(t_cmd *cmd, char **envp)
 {
-	int cmd_count;
-	int **pipes;
-	int *pid;
-	int	i;
-	char *cmd_path;
-	
+	int		cmd_count;
+	int		**pipes;
+	int		*pid;
+	int		i;
+	char	*cmd_path;
+
 	i = 0;
 	cmd_count = count_cmd(cmd);
 	pipes = make_pipes(cmd_count);
@@ -160,12 +180,13 @@ int	ft_execute(t_cmd *cmd, char **envp)
 				close(pipes[i - 1][0]);
 			}
 			//check command
+			built_in(cmd);
 			cmd_path = get_cmd(cmd);
 			if (!cmd_path)
 				(ft_error(cmd->cmd), exit(1));
 			execve(cmd->cmd, cmd->args, envp);
 			write(2, "minishell: ", 11);
-			(perror(cmd->cmd), exit(126));
+			(perror(cmd->cmd), exit(126)); 
 		}
 		else
 		{
@@ -189,17 +210,15 @@ int	ft_execute(t_cmd *cmd, char **envp)
 	while (pipes[i])
 		free(pipes[i++]);
 	free(pipes);
-	return(g_env.status);
+	return (g_env.status);
 }
 
-int	main(int ac, char **av, char **envp)
-{
-	(void)ac;
-	(void)av;
-	
-	g_env.export = NULL;
-	make_env(envp);
-	printf("----------------\n");
-	return (0);
-}
-
+// int	main(int ac, char **av, char **envp)
+// {
+// 	(void)ac;
+// 	(void)av;
+// 	g_env.export = NULL;
+// 	make_env(envp);
+// 	printf("----------------\n");
+// 	return (0);
+// }

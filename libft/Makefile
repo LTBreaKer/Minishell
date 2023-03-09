@@ -6,7 +6,7 @@
 #    By: aharrass <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/06 20:48:11 by aharrass          #+#    #+#              #
-#    Updated: 2023/03/04 10:58:46 by aharrass         ###   ########.fr        #
+#    Updated: 2023/03/09 16:03:58 by aharrass         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,11 @@ SRCS	=	ft_isalpha.c		\
 				ft_putstr_fd.c	\
 				ft_putendl_fd.c	\
 				ft_putnbr_fd.c	\
+				ft_strjoin3.c		\
+				free_me.c				\
+				ft_split_qk.c		\
+				ft_strcmp2.c		\
+				
 
 OB_PATH = ../obj/
 

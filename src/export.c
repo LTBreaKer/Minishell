@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 02:04:12 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/04 11:02:04 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/09 16:25:32 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,26 @@ char	*ft_trim(char *str)
 		return (ft_strdup(str));
 }
 
+char	**get_var(char *var)
+{
+	int		i;
+	char	**tmp;
+
+	i = 0;
+	while (var[i] && var[i] != '=')
+		i++;
+	if (i == (int)ft_strlen(var) - 1)
+		return (ft_split(var, '='));
+	else
+	{
+		tmp = malloc(sizeof(char *) * 3);
+		tmp[0] = ft_substr(var, 0, i);
+		tmp[1] = ft_substr(var, i + 1, ft_strlen(var) - i);
+		tmp[2] = NULL;
+	}
+	return (tmp);
+}
+
 int	ft_check_name(char *var)
 {
 	char	**tmp;
@@ -41,7 +61,7 @@ int	ft_check_name(char *var)
 	i = 1;
 	if (var == NULL)
 		return (0);
-	tmp = ft_split(var, '=');
+	tmp = get_var(var);
 	if (ft_isdigit(tmp[0][0]))
 		return (printf("minishell: export: `%s': not a valid identifier\n",
 				tmp[0]), 1);
@@ -63,7 +83,7 @@ int	ft_check_name(char *var)
 	return (0);
 }
 
-void	ft_export(char *var)
+void	ft_export_help(char *var)
 {
 	t_env		*tmp;
 	t_export	*tmp3;
@@ -94,10 +114,10 @@ void	ft_export(char *var)
 	}
 	else if (ft_strnstr(var, "=", ft_strlen(var)))
 	{
-		tmp2 = ft_split(var, '=');
+		tmp2 = get_var(var);
 		while (tmp)
 		{
-			if (!ft_strcmp(tmp->var, tmp2[0]))
+			if (!ft_strcmp2(tmp->var, tmp2[0]))
 			{
 				if (tmp->value != NULL)
 					free(tmp->value);
@@ -116,11 +136,28 @@ void	ft_export(char *var)
 	{
 		while (tmp)
 		{
-			if (!ft_strcmp(tmp->var, var))
+			if (!ft_strcmp2(tmp->var, var))
 				return (free(pwd));
 			tmp = tmp->next;
 		}
 		ft_lstadd_back_export(&g_env.export, ft_lstnew_export(var));
 	}
 	free(pwd);
+}
+
+void	ft_export(char **args)
+{
+	int		i;
+
+	i = 1;
+	if (args[1] == NULL)
+		ft_export_help(NULL);
+	else
+	{
+		while (args[i])
+		{
+			ft_export_help(args[i]);
+			i++;
+		}
+	}
 }

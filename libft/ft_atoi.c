@@ -6,21 +6,59 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 14:54:00 by aharrass          #+#    #+#             */
-/*   Updated: 2023/01/09 00:07:10 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/09 15:22:14 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-long long	ft_atoi(const char *str)
+long long	atoi_helper(const char *str, int i, int s, int f)
 {
-	int					i;
-	int					s;
-	unsigned long long	j;
+	long long	j;
+
+	j = 0;
+	if (f == 0)
+	{
+		while (ft_isdigit(str[i]))
+		{
+			j = j * 10 + str[i++] - '0';
+			if (j > 9223372036854775807 && s == 1)
+				return (-1);
+			if (j > 9223372036854775807 && s == -1)
+				return (0);
+		}
+		return (j * s);
+	}
+	else
+	{
+		while (ft_isdigit(str[i]))
+		{
+			j = j * 10 + str[i++] - '0';
+			if (j > 9223372036854775807)
+			{
+				ft_putendl_fd("minishell: exit: numeric argument required", 2);
+				return (-1);
+			}
+		}
+		j *= s;
+		while (j > 255 || j < 0)
+		{
+			if (j > 255)
+				j = j % 256;
+			else if (j < 0)
+				j += 256;
+		}
+	}
+	return (j);
+}
+
+long long	ft_atoi(const char *str, int f)
+{
+	int	i;
+	int	s;
 
 	i = 0;
 	s = 1;
-	j = 0;
 	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
 		i++;
 	if (str[i] == '-')
@@ -30,13 +68,5 @@ long long	ft_atoi(const char *str)
 	}
 	else if (str[i] == '+')
 		i++;
-	while (ft_isdigit(str[i]))
-	{
-		j = j * 10 + str[i++] - '0';
-		if (j > 9223372036854775807 && s == 1)
-			return (-1);
-		if (j > 9223372036854775807 && s == -1)
-			return (0);
-	}
-	return (j * s);
+	return (atoi_helper(str, i, s, f));
 }

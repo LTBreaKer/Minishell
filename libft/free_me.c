@@ -1,35 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   free_me.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/07 00:10:14 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/09 15:56:04 by aharrass         ###   ########.fr       */
+/*   Created: 2023/03/03 15:24:11 by rel-mham          #+#    #+#             */
+/*   Updated: 2023/03/03 15:25:00 by rel-mham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include "libft.h"
 
-size_t	ft_strlen(const char *s)
+void	free_me(char **splited, int i)
 {
-	size_t	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-
-size_t	ft_double_strlen(char **s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i] != NULL)
-	{
-		i++;
-	}
-	return (i);
+	while (i-- > 0)
+		free(splited[i]);
+	free(splited);
 }
