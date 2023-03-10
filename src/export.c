@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 02:04:12 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/09 16:25:32 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/10 15:19:10 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	ft_export_help(char *var)
 		}
 		while (tmp3)
 		{
-			printf("declare -x %s=\"\"\n", tmp3->var);
+			printf("declare -x %s\n", tmp3->var);
 			tmp3 = tmp3->next;
 		}
 		printf("declare -x _=\"%s/minishell\"\n", pwd);

@@ -6,23 +6,18 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 18:05:14 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/09 11:22:52 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/10 17:36:53 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	ft_exit(char **args)
+void	ft_exit(char **args, int check)
 {
 	int	i;
 
 	i = 0;
-	if (args[1] && args[2])
-	{
-		ft_putendl_fd("minishell: exit: too many arguments", 2);
-		g_env.status = 1;
-		return ;
-	}
+	
 	if (args[1])
 	{
 		while (args[1][i])
@@ -36,11 +31,20 @@ void	ft_exit(char **args)
 			}
 			i++;
 		}
-		if (args[2])
+		if (args[1] && args[2])
 		{
 			ft_putendl_fd("minishell: exit: too many arguments", 2);
 			g_env.status = 1;
 			return ;
+		}
+		if (args[2])
+		{
+			ft_putendl_fd("minishell: exit: too many arguments", 2);
+			g_env.status = 1;
+			if (check == 1)
+				exit(g_env.status);
+			else
+				return ;
 		}
 		i = ft_atoi(args[1], 1);
 		if (i == -1)
@@ -51,7 +55,6 @@ void	ft_exit(char **args)
 		g_env.status = i;
 		exit(g_env.status);
 	}
-	else
-		ft_putendl_fd("exit", 1);
+	ft_putendl_fd("exit", 1);
 	exit(g_env.status);
 }

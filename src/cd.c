@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 18:06:02 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/09 16:19:44 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/10 12:52:29 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ int	ft_cd(char *dir)
 		ft_lstadd_after_last(&g_env.env, ft_lstnew("PWD=", 0));
 		ft_change_elem("PWD", pwd);
 	}
-	ft_putendl_fd(pwd, 1);
 	free(pwd);
 	free(dir);
 	

@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 21:11:11 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/09 15:51:15 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/10 13:19:31 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,15 +132,18 @@ void	fill_the_list(t_lex *g, t_cmd **lst_final)
 				i++;
 		}
 		if (!*full_heredoc)
-				{
-					free (full_heredoc);
-					full_heredoc = NULL;
-				}
+		{
+			free (full_heredoc);
+			full_heredoc = NULL;
+		}
 		if (full_heredoc)
 		{
+			
 			new->heredoc = ft_split_qk(full_heredoc, ' ');
 			free(full_heredoc);
 		}
+		else
+			new->heredoc = NULL;
 		ft_lstadd_backfinal(lst_final, new);
 		if (g->splited2[i])
 			i++;

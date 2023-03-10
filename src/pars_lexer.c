@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 17:16:19 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/09 16:14:39 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/10 10:56:26 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	lex_helper3(t_lex *g, t_stack **lst)
 int	lex(t_lex *g)
 {
 	t_stack	*lst;
-	int		i;
+	// int		i;
 
 	lst = NULL;
 	if (quotes_check(g) == 0)
@@ -91,18 +91,18 @@ int	lex(t_lex *g)
 			lex_helper3(g, &lst);
 	}
 	g->new_line_tmp = lst_to_str(lst);
-	//free_lst(lst);
-	printf("%s\n", g->new_line_tmp);
+	free_lst(lst);
+	// printf("%s\n", g->new_line_tmp);
 	g->splited1 = ft_split_qk(g->new_line_tmp, ' ');
 	free(g->new_line_tmp);
 	if (g->splited1[0][0] == '\0')
 		return (2);
 	ft_transfert(g);
-	i = 0;
-	while (g->splited2[i])
-	{
-		printf("%s\n", g->splited2[i]);
-		i++;
-	}
+	// i = 0;
+	// while (g->splited2[i])
+	// {
+	// 	printf("%s\n", g->splited2[i]);
+	// 	i++;
+	// }
 	return (3);
 }
