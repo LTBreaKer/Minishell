@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 21:19:47 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/09 15:58:33 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/11 18:57:24 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ void				ft_putchar_fd(char c, int fd);
 void				ft_putstr_fd(char *s, int fd);
 void				ft_putendl_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
+char				*ft_strjoin1(char *s1, char *s2);
 char				*ft_strjoin2(char *s1, char const *s2);
 char				*ft_strjoin3(char *s1, char *s2);
 char				**ft_split_qk(char const *s, char c);

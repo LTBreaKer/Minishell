@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:25:21 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/11 13:48:30 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/11 18:38:04 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,11 @@ int	ft_execute(t_cmd *cmd, char **envp)
 		else if (ft_strncmp(cmd->args[0], "cd", 2) == 0 && cmd->args[0][2] == '\0')
 		{
 			ft_cd(cmd->args[1]);
+			tmp = tmp->next;
+		}
+		else if (ft_strncmp(cmd->args[0], "export", 6) == 0 && cmd->args[0][6] == '\0')
+		{
+			ft_export(cmd->args);
 			tmp = tmp->next;
 		}
 		else

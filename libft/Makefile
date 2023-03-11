@@ -6,7 +6,7 @@
 #    By: aharrass <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/06 20:48:11 by aharrass          #+#    #+#              #
-#    Updated: 2023/03/09 16:03:58 by aharrass         ###   ########.fr        #
+#    Updated: 2023/03/11 18:57:48 by aharrass         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,6 +38,7 @@ SRCS	=	ft_isalpha.c		\
 				ft_strdup.c			\
 				ft_substr.c			\
 				ft_strjoin.c		\
+				ft_strjoin1.c		\
 				ft_strjoin2.c		\
 				ft_strtrim.c		\
 				ft_split.c			\

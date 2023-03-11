@@ -1,31 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   ft_strjoin1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/24 14:56:51 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/11 17:46:07 by aharrass         ###   ########.fr       */
+/*   Created: 2023/03/11 18:56:30 by aharrass          #+#    #+#             */
+/*   Updated: 2023/03/11 18:56:56 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-void	ft_echo(t_cmd *cmd)
+char	*ft_strjoin1(char *s1, char *s2)
 {
-	int	i;
+	size_t	len;
+	char	*res;
+	size_t	i;
+	size_t	j;
 
-	i = 1;
-	if (cmd->args[1] && ft_strcmp2(cmd->args[1], "-n") == 0)
-		i++;
-	while (cmd->args[i])
-	{
-		ft_putstr_fd(cmd->args[i], 1);
-		if (cmd->args[i + 1])
-			ft_putchar_fd(' ', 1);
-		i++;
-	}
-	if (cmd->args[1] && ft_strcmp2(cmd->args[1], "-n") != 0)
-		ft_putchar_fd('\n', 1);
+	i = 0;
+	j = 0;
+	if (!s1 || !s2)
+		return (NULL);
+	len = ft_strlen(s1) + ft_strlen(s2);
+	res = (malloc(len * (sizeof(*res)) + 1));
+	if (!res)
+		return (NULL);
+	while (s1[j])
+		res[i++] = s1[j++];
+	j = 0;
+	while (s2[j])
+		res[i++] = s2[j++];
+	res[i] = 0;
+	free(s1);
+	free(s2);
+	return (res);
 }
