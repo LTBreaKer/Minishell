@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:25:21 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/10 20:21:27 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/11 13:48:30 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,7 +184,7 @@ int	ft_execute(t_cmd *cmd, char **envp)
 				if (i == 0)
 				{
 					if (tmp->next)
-						(printf("ok\n") , dup2(pipes[i][1], 1), close(pipes[i][1]));
+						(dup2(pipes[i][1], 1), close(pipes[i][1]));
 					if (tmp->in != -2)
 						(dup2(tmp->in, 0), close(tmp->in));
 					if (tmp->out != -2)
@@ -220,7 +220,7 @@ int	ft_execute(t_cmd *cmd, char **envp)
 				{
 					cmd_path = get_cmd(tmp);
 					if (!cmd_path)
-						(ft_error(tmp->args[0]), exit(1));
+						(ft_error(tmp->args[0]), exit(127));
 					execve(cmd_path, tmp->args, envp);
 					write(2, "minishell: ", 11);
 					(perror(tmp->args[0]), exit(126));
@@ -228,14 +228,13 @@ int	ft_execute(t_cmd *cmd, char **envp)
 			}
 			else
 			{
+				int t = tmp->in;
 				close(tmp->in);
 				close(tmp->out);
 				if (i == 0)
 				{
-					
 					if (pipes)
 					{
-						
 						//close(pipes[i][0]);
 						close(pipes[i][1]);
 					}
@@ -243,6 +242,7 @@ int	ft_execute(t_cmd *cmd, char **envp)
 				else if (i == cmd_count - 1)
 				{
 					//close(tmp->in);
+					close(t);
 					close(pipes[i - 1][0]);
 					close(pipes[i - 1][1]);
 				}
@@ -264,10 +264,11 @@ int	ft_execute(t_cmd *cmd, char **envp)
 			int k;
 
 			k = i - 1;
-			i = 0;
-			while (i < k)
-				waitpid(pid[i++], NULL, 0);
+			//i = 0;
+			// while (i < k)
+			// 	waitpid(pid[i++], NULL, 0);
 			waitpid(pid[k], &g_env.status, 0);
+			close_pipes(pipes, cmd_count);
 			if (WIFEXITED(g_env.status))
 				g_env.status = WEXITSTATUS(g_env.status);
 			else
