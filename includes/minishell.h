@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 15:01:31 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/11 18:58:21 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/11 22:40:07 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,4 +125,5 @@ void				add_push(t_stack **lst, char c);
 void				free_lst(t_stack *lst);
 void				ft_lstadd_front(t_stack **lst, t_stack *new);
 void				fill_the_list(t_lex *g, t_cmd **lst_final);
+void				expand_me(t_lex *g);
 #endif

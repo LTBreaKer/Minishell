@@ -30,6 +30,7 @@ SR =	echo.c		\
 			pars_lexer_utils.c	\
 			pars_stack_func.c	\
 			pars_syntax_error.c	\
+			pars_expander.c	\
 			pars_main.c	\
 			
 SRCS = $(addprefix ${SR_PATH}, ${SR})

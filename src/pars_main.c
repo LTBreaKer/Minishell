@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:54:13 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/11 13:52:14 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/12 13:47:28 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	main(int ac, char **av, char **envp)
 			}
 			else
 			{
+				//expand_me(&g);
 				fill_the_list(&g, &lst_final);
 				// tmp = lst_final;
 				// while (tmp)

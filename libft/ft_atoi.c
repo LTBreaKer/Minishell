@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 14:54:00 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/09 15:22:14 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/12 13:41:30 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 long long	atoi_helper(const char *str, int i, int s, int f)
 {
-	long long	j;
+	unsigned long	j;
+	long long			k;
 
 	j = 0;
 	if (f == 0)
@@ -40,16 +41,16 @@ long long	atoi_helper(const char *str, int i, int s, int f)
 				return (-1);
 			}
 		}
-		j *= s;
-		while (j > 255 || j < 0)
+		k = j * s;
+		while (k > 255 || k < 0)
 		{
-			if (j > 255)
-				j = j % 256;
-			else if (j < 0)
-				j += 256;
+			if (k > 255)
+				k = k % 256;
+			else if (k < 0)
+				k += 256;
 		}
 	}
-	return (j);
+	return (k);
 }
 
 long long	ft_atoi(const char *str, int f)

@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:19:22 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/11 22:36:28 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/11 22:44:07 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,26 +100,26 @@ char	*clean_quotes(char *s)
 	return (ret);
 }
 
-char	*exec_expand(char *s)
-{
-	char	*ret;
-	int		i;
+// char	*exec_expand(char *s)
+// {
+// 	char	*ret;
+// 	int		i;
 
-	i = 0;
-	ret = NULL;
-	while (s[i])
-	{
-		if (s[i] == '$')
-		{
-			if (xpnd_status(s) == 1)
-			{
-				if (ret != NULL)
-					free(ret);
-				ret = valid_xpnd(s);
-			}
-		}
-	}
-}
+// 	i = 0;
+// 	ret = NULL;
+// 	while (s[i])
+// 	{
+// 		if (s[i] == '$')
+// 		{
+// 			if (xpnd_status(s) == 1)
+// 			{
+// 				if (ret != NULL)
+// 					free(ret);
+// 				ret = valid_xpnd(s);
+// 			}
+// 		}
+// 	}
+// }
 
 void	expand_me(t_lex *g)
 {
@@ -127,17 +127,17 @@ void	expand_me(t_lex *g)
 	// int		xpnd_status;
 
 	g->i = 0;
-	while (g->splited2[g->i])
-	{
-		clean = exec_expand(g->splited2[g->i]);
-	}
+	// while (g->splited2[g->i])
+	// {
+	// 	clean = exec_expand(g->splited2[g->i]);
+	// }
 	g->i = 0;
 	while (g->splited2[g->i])
 	{
 		clean = clean_quotes(g->splited2[g->i]);
 		free(g->splited2[g->i]);
 		g->splited2[g->i] = clean;
-		printf("clean : %s\n", clean);
+		//printf("clean : %s\n", clean);
 		g->i++;
 	}
 }

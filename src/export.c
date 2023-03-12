@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 02:04:12 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/11 19:14:22 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/11 22:54:34 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,7 @@ int	ft_check_name(char *var)
 		if (i == ft_strlen(tmp[0]) - 1 && tmp[0][i] == '+'
 			&& ft_strlen(tmp[0]) < ft_strlen(var)
 			&& var[ft_strlen(tmp[0])] == '=')
-			{
-				while (tmp[i])
-					free(tmp[i++]);
-				free(tmp);
-				return (0);
-			}
+				break;
 		if (!ft_isalnum(tmp[0][i]) && tmp[0][i] != '_')
 			return (printf("minishell: export: `%s': not a valid identifier\n",
 					tmp[0]), 1);
@@ -122,27 +117,27 @@ void	ft_export_help(char *var)
 	else if (ft_strnstr(var, "=", ft_strlen(var)))
 	{
 		tmp2 = get_var(var);
-		// if (tmp2[0][ft_strlen(tmp2[0]) - 1] == '+')
-		// {
-		// 	tmp2[0][ft_strlen(tmp2[0]) - 1] = '\0';
-		// 	check = 1;
-		// }
+		if (tmp2[0][ft_strlen(tmp2[0]) - 1] == '+')
+		{
+			tmp2[0][ft_strlen(tmp2[0]) - 1] = '\0';
+			check = 1;
+		}
 		while (tmp)
 		{
 			if (!ft_strcmp2(tmp->var, tmp2[0]))
 			{
-				// if (check == 1)
-				// 	tmp->value = ft_strjoin1(tmp->value, ft_trim(tmp2[1]));
-				// else
-				// {
+				if (check == 1)
+					tmp->value = ft_strjoin1(tmp->value, ft_trim(tmp2[1]));
+				else
+				{
 					if (tmp->value != NULL)
 						free(tmp->value);
 					tmp->value = ft_trim(tmp2[1]);
-				//}
+				}
 				while (tmp2[i])
 					free(tmp2[i++]);
 				free(tmp2);
-				return (printf("ok\n"), free(pwd));
+				return (free(pwd));
 			}
 			tmp = tmp->next;
 		}
