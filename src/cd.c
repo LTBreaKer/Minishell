@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 18:06:02 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/10 12:52:29 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/14 14:46:25 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,12 @@ int	ft_cd(char *dir)
 		ft_putstr_fd("cd: HOME not set\n", 2);
 		return (1);
 	}
-	if (!*dir || (*dir == '~' && *(dir + 1) == 0))
+	if (!*dir)
+	{
+		dir = ft_strdup(ft_get_value("PWD"));
+		//return (0);
+	}
+	if ((*dir == '~' && *(dir + 1) == 0))
 	{
 		free(dir);
 		dir = ft_strdup(ft_get_value("HOME"));
@@ -42,6 +47,8 @@ int	ft_cd(char *dir)
 			free(dir);
 			return (1);
 		}
+		else
+			printf("%s\n", ft_get_value("OLDPWD"));
 	}
 	else if (chdir(dir) == -1)
 	{
@@ -65,6 +72,5 @@ int	ft_cd(char *dir)
 	}
 	free(pwd);
 	free(dir);
-	
 	return (0);
 }

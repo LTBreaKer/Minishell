@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:54:13 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/12 13:47:28 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/14 14:56:50 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,51 +51,51 @@ int	main(int ac, char **av, char **envp)
 			{
 				printf("minishell: syntax error near unexpected token `%s\'\n", err);
 				freee_sub_split(g.splited2);
-				freee_sub_split(g.splited1);
+				//freee_sub_split(g.splited1);
 				g_env.status = 258;
 			}
 			else
 			{
-				//expand_me(&g);
 				fill_the_list(&g, &lst_final);
-				// tmp = lst_final;
-				// while (tmp)
-				// {
-				// 	int i = 0;
-				// 	printf("{in : %d}\n", tmp->in);
-				// 	printf("{out : %d}\n", tmp->out);
-				// 	if (tmp->args)
-				// 	{
-				// 		while (tmp->args[i])
-				// 		{
-				// 			printf("{arg%d : %s}\n", i, tmp->args[i]);
-				// 			i++;
-				// 		}
-				// 	}
-				// 	i = 0;
-				// 	if (!tmp->heredoc)
-				// 				printf("{her doc : %s}\n}", (char *)tmp->heredoc);
-				// 	if (tmp->heredoc)
-				// 	{
-				// 		while (tmp->heredoc[i])
-				// 		{
+				tmp = lst_final;
+				while (tmp)
+				{
+					int i = 0;
+					printf("{in : %d}\n", tmp->in);
+					printf("{out : %d}\n", tmp->out);
+					if (tmp->args)
+					{
+						while (tmp->args[i])
+						{
+							printf("{arg%d : %s}\n", i, tmp->args[i]);
+							i++;
+						}
+					}
+					i = 0;
+					if (!tmp->heredoc)
+								printf("{her doc : %s}\n}", (char *)tmp->heredoc);
+					if (tmp->heredoc)
+					{
+						while (tmp->heredoc[i])
+						{
 							
-				// 			printf("{here doc %d : %s}\n", i, (char *)tmp->heredoc[i]);
-				// 			i++;
-				// 		}
-				// 	}
-				// 	printf("------------------------------\n");
-				// 	tmp = tmp->next;
-				// }
+							printf("{here doc %d : %s}\n", i, (char *)tmp->heredoc[i]);
+							i++;
+						}
+					}
+					printf("------------------------------\n");
+					tmp = tmp->next;
+				}
 				freee_sub_split(g.splited2);
-				freee_sub_split(g.splited1);
+				//freee_sub_split(g.splited1);
+				expand_me(&g, lst_final->args);
+				ft_execute(lst_final, envp);
 			}
 			add_history(g.line);
+			
 		}
 		else if (lx == 2)
-			free(g.splited1);
-		ft_execute(lst_final, envp);
-		
+			free(g.splited2);
 		while (lst_final)
 		{
 			int		j;

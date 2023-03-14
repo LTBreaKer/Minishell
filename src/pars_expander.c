@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:19:22 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/11 22:44:07 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/14 14:56:37 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ char	*clean_quotes(char *s)
 // 	}
 // }
 
-void	expand_me(t_lex *g)
+void	expand_me(t_lex *g, char **args)
 {
 	char	*clean;
 	// int		xpnd_status;
@@ -132,11 +132,13 @@ void	expand_me(t_lex *g)
 	// 	clean = exec_expand(g->splited2[g->i]);
 	// }
 	g->i = 0;
-	while (g->splited2[g->i])
+	if (args == NULL)
+		return ;
+	while (args[g->i])
 	{
-		clean = clean_quotes(g->splited2[g->i]);
-		free(g->splited2[g->i]);
-		g->splited2[g->i] = clean;
+		clean = clean_quotes(args[g->i]);
+		free(args[g->i]);
+		args[g->i] = clean;
 		//printf("clean : %s\n", clean);
 		g->i++;
 	}

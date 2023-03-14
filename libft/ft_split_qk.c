@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_qk.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:08:51 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/07 18:51:41 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/13 16:29:38 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	wc_help(t_data *g, int n)
 	while (1)
 	{
 		g->idx++;
+		if (g->str[g->idx] == n)
+			break ;
 		if (g->str[g->idx] == n || g->str[g->idx] == '\0')
 		{
 			while ((g->str[g->idx + 1] != g->c && g->str[g->idx + 1] != '\t'
@@ -65,7 +67,9 @@ void	wc_help(t_data *g, int n)
 			break ;
 		}
 	}
-	g->i++;
+	if (g->str[g->idx + 1] == g->c || g->str[g->idx + 1] == '\t'
+		|| g->str[g->idx + 1] == '\n' || g->str[g->idx + 1] == 0)
+		g->i++;
 }
 
 int	word_count(t_data *g)
