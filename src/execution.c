@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:25:21 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/14 16:27:17 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/14 19:10:33 by rel-mham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,19 +167,19 @@ int	ft_execute(t_cmd *cmd, char **envp)
 		return (perror("malloc"), 1);
 	while (tmp)
 	{
-		
-		if (tmp->args && ft_strncmp(tmp->args[0], "exit", 4) == 0
-					&& tmp->args[0][4] == '\0' && tmp->next == NULL)
+		if (cmd->args && ft_strncmp(tmp->args[0], "exit", 4) == 0
+					&& tmp->args[0][4] == '\0' && cmd->next == NULL)
 		{
 					ft_exit(tmp->args, 0);
 					tmp = tmp->next;
 		}
-		else if (cmd->args && ft_strncmp(cmd->args[0], "cd", 2) == 0 && cmd->args[0][2] == '\0')
+		else if (cmd->args && ft_strncmp(cmd->args[0], "cd", 2) == 0 && cmd->args[0][2] == '\0' && cmd->next == NULL)
 		{
+			printf("##########\n");
 			ft_cd(cmd->args[1]);
 			tmp = tmp->next;
 		}
-		else if (cmd->args && ft_strncmp(cmd->args[0], "export", 6) == 0 && cmd->args[0][6] == '\0')
+		else if (cmd->args && ft_strncmp(cmd->args[0], "export", 6) == 0 && cmd->args[0][6] == '\0' && cmd->next == NULL)
 		{
 			ft_export(cmd->args);
 			tmp = tmp->next;

@@ -32,6 +32,7 @@ SR =	echo.c		\
 			pars_syntax_error.c	\
 			pars_expander.c	\
 			pars_main.c	\
+			pars_qcleaner.c \
 			
 SRCS = $(addprefix ${SR_PATH}, ${SR})
 
