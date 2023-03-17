@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/08 14:54:00 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/12 13:41:30 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/15 14:49:40 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ long long	atoi_helper(const char *str, int i, int s, int f)
 			j = j * 10 + str[i++] - '0';
 			if (j > 9223372036854775807)
 			{
-				ft_putendl_fd("minishell: exit: numeric argument required", 2);
+				ft_putendl_fd("exit\nminishell: exit: numeric argument required", 2);
 				return (-1);
 			}
 		}

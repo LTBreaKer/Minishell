@@ -3,26 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 15:01:31 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/14 19:19:36 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/17 22:26:44 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include "../libft/libft.h"
+# include "get_next_line.h"
+# include <dirent.h>
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
+//# include "/Users/aharrass/goinfre/homebrew/opt/readline/include/readline/readline.h"
+# include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/errno.h>
 # include <sys/wait.h>
 # include <unistd.h>
-# include <dirent.h>
+# include <termios.h>
 
 typedef struct s_stack
 {
@@ -71,15 +75,17 @@ struct				s_env
 	t_env			*env;
 	t_export		*export;
 	int				*pid;
+	int				h_id;
 	int				cmd_count;
 };
 
 typedef struct s_cmd
 {
 	char			**heredoc;
+	int				*herepipe;
 	int				in;
 	int				out;
-	int				err;
+	int				wf;
 	char			**args;
 	struct s_cmd	*next;
 }					t_cmd;
@@ -88,6 +94,7 @@ struct s_env		g_env;
 
 //extern struct s_env	g_env;
 
+void				rl_replace_line(const char *s, int clear_undo);
 void				ft_print(void);
 void				ft_pwd(void);
 int					ft_cd(char *dir);
@@ -110,7 +117,10 @@ void				ft_env_remove(t_env **env, char *var);
 int					count_cmd(t_cmd *cmd);
 void				ft_error(char *str);
 char				**get_var(char *var);
+void				heredoc(t_cmd *cmd);
 int					ft_execute(t_cmd *cmd, char **envp);
+void				sigint_handler(int sig);
+void				sigquit_handler(int sig);
 
 //-----------------PARSING-----------------//
 

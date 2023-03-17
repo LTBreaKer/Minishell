@@ -1,19 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   sigs.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/11 22:45:03 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/12 14:21:36 by aharrass         ###   ########.fr       */
+/*   Created: 2023/03/15 18:17:54 by aharrass          #+#    #+#             */
+/*   Updated: 2023/03/17 22:30:11 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/minishell.h"
+#include "../includes/minishell.h"
 
-int main()
+void	sigint_handler(int sig)
 {
-	char *str[] = {"awk", "BEGIN {print \"Arguments =\", ARGC}", "One", "Two", "Three", "Four", NULL};
-	execve("/usr/bin/awk", str, NULL);
+	(void)sig;
+	int i;
+
+	i = 0;
+	ft_putchar_fd('\n', 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+	g_env.status = 1;
+}
+
+void				sigquit_handler(int sig)
+{
+	(void)sig;
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
 }

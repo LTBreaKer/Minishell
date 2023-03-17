@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:25:21 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/14 19:10:33 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/17 21:32:49 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ char	*get_cmd(t_cmd *cmd)
 
 	i = 0;
 	
+	if (!cmd->args)
+		exit(0);
 	if (!cmd->args[0])
 		exit (0);
 	if ((cmd->args[0][0] == '.' || cmd->args[0][0] == '/'))
@@ -128,30 +130,32 @@ char	*get_cmd(t_cmd *cmd)
 
 int	built_in(t_cmd *cmd)
 {
-	if (ft_strncmp(cmd->args[0], "echo", 4) == 0 && cmd->args[0][4] == '\0')
-		return (ft_echo(cmd), 0);
-	else if (ft_strncmp(cmd->args[0], "cd", 2) == 0 && cmd->args[0][2] == '\0')
-		return (ft_cd(cmd->args[1]), 0);
-	else if (ft_strncmp(cmd->args[0], "pwd", 3) == 0 && cmd->args[0][3] == '\0')
-		return (ft_pwd(), 0);
-	else if (ft_strncmp(cmd->args[0], "export", 6) == 0
-			&& cmd->args[0][6] == '\0')
-		return (ft_export(cmd->args), 0);
-	else if (ft_strncmp(cmd->args[0], "unset", 5) == 0
-			&& cmd->args[0][5] == '\0')
-		return (ft_unset(cmd->args), 0);
-	else if (ft_strncmp(cmd->args[0], "env", 3) == 0 && cmd->args[0][3] == '\0')
-		return (ft_env(), 0);
-	else if (ft_strncmp(cmd->args[0], "exit", 4) == 0
-			&& cmd->args[0][4] == '\0')
-		return(ft_exit(cmd->args, 0), 1);
+	if (cmd->args)
+	{
+		if (ft_strncmp(cmd->args[0], "echo", 4) == 0 && cmd->args[0][4] == '\0')
+			return (ft_echo(cmd), 0);
+		else if (ft_strncmp(cmd->args[0], "cd", 2) == 0 && cmd->args[0][2] == '\0')
+			return (ft_cd(cmd->args[1]), 0);
+		else if (ft_strncmp(cmd->args[0], "pwd", 3) == 0 && cmd->args[0][3] == '\0')
+			return (ft_pwd(), 0);
+		else if (ft_strncmp(cmd->args[0], "export", 6) == 0
+				&& cmd->args[0][6] == '\0')
+			return (ft_export(cmd->args), 0);
+		else if (ft_strncmp(cmd->args[0], "unset", 5) == 0
+				&& cmd->args[0][5] == '\0')
+			return (ft_unset(cmd->args), 0);
+		else if (ft_strncmp(cmd->args[0], "env", 3) == 0 && cmd->args[0][3] == '\0')
+			return (ft_env(), 0);
+		else if (ft_strncmp(cmd->args[0], "exit", 4) == 0
+				&& cmd->args[0][4] == '\0')
+			return(ft_exit(cmd->args, 0), 1);
+	}
 	return (1);
 }
 
 int	ft_execute(t_cmd *cmd, char **envp)
 {
 	int		**pipes;
-	//int		*pid;
 	int		i;
 	char	*cmd_path;
 	int		s;
@@ -159,12 +163,18 @@ int	ft_execute(t_cmd *cmd, char **envp)
 
 	i = 0;
 	s = 0;
+	
+	cmd->herepipe = NULL;
 	tmp = cmd;
 	g_env.cmd_count = count_cmd(cmd);
 	pipes = make_pipes(g_env.cmd_count);
+	if (!pipes && g_env.cmd_count > 1)
+		return (1);
 	g_env.pid = ft_calloc(sizeof(int) , g_env.cmd_count);
 	if (!g_env.pid)
 		return (perror("malloc"), 1);
+	
+	heredoc(cmd);
 	while (tmp)
 	{
 		if (cmd->args && ft_strncmp(tmp->args[0], "exit", 4) == 0
@@ -175,13 +185,17 @@ int	ft_execute(t_cmd *cmd, char **envp)
 		}
 		else if (cmd->args && ft_strncmp(cmd->args[0], "cd", 2) == 0 && cmd->args[0][2] == '\0' && cmd->next == NULL)
 		{
-			printf("##########\n");
 			ft_cd(cmd->args[1]);
 			tmp = tmp->next;
 		}
 		else if (cmd->args && ft_strncmp(cmd->args[0], "export", 6) == 0 && cmd->args[0][6] == '\0' && cmd->next == NULL)
 		{
 			ft_export(cmd->args);
+			tmp = tmp->next;
+		}
+		else if (cmd->args && ft_strncmp(cmd->args[0], "unset", 5) == 0 && cmd->args[0][5] == '\0' && cmd->next == NULL)
+		{
+			ft_unset(cmd->args);
 			tmp = tmp->next;
 		}
 		else
@@ -192,10 +206,12 @@ int	ft_execute(t_cmd *cmd, char **envp)
 				return (perror("fork"), 1);
 			if (g_env.pid[i] == 0)
 			{
-				if (tmp->in == -1 || tmp->out == -1 || tmp->err == -1)
+				signal(SIGINT, SIG_DFL);
+				signal(SIGQUIT, SIG_DFL);
+				if (!tmp->args)
+					exit(0);
+				if (tmp->in == -1 || tmp->out == -1)
 					exit(1);
-				if (tmp->err != -2)
-					(dup2(tmp->err, 2), close(tmp->err));
 				if (i == 0)
 				{
 					if (tmp->next)
@@ -228,11 +244,18 @@ int	ft_execute(t_cmd *cmd, char **envp)
 						(dup2(tmp->out, 1), close(tmp->out));
 					close(pipes[i - 1][0]);
 				}
+				if (tmp->heredoc)
+				{
+					dup2(tmp->herepipe[0], 0);
+					close(tmp->herepipe[0]);
+					close(tmp->herepipe[1]);
+				}
 				//check command
 				if (!built_in(tmp))
 					exit(0);
 				else
 				{
+					
 					cmd_path = get_cmd(tmp);
 					if (!cmd_path)
 						(ft_error(tmp->args[0]), exit(127));
@@ -243,9 +266,15 @@ int	ft_execute(t_cmd *cmd, char **envp)
 			}
 			else
 			{
+				
 				int t = tmp->in;
 				close(tmp->in);
 				close(tmp->out);
+				if (tmp->herepipe)
+				{
+					close(tmp->herepipe[0]);
+					close(tmp->herepipe[1]);
+				}
 				if (i == 0)
 				{
 					if (pipes)
@@ -269,6 +298,7 @@ int	ft_execute(t_cmd *cmd, char **envp)
 				}
 				i++;
 				tmp = tmp->next;
+				
 			}
 		}
 	}
@@ -283,7 +313,14 @@ int	ft_execute(t_cmd *cmd, char **envp)
 			// while (i < k)
 			// 	waitpid(pid[i++], NULL, 0);
 			waitpid(g_env.pid[k], &g_env.status, 0);
+			 i = 0;
+			while (i < k)
+				kill(g_env.pid[i++], SIGKILL);
 			close_pipes(pipes, g_env.cmd_count);
+			i = 0;
+			while (i < k)
+				waitpid(g_env.pid[i++], NULL, 0);
+			
 			if (WIFEXITED(g_env.status))
 				g_env.status = WEXITSTATUS(g_env.status);
 			else

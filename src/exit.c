@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 18:05:14 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/12 13:46:12 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/15 14:50:57 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	ft_exit(char **args, int check)
 		if (i == -1)
 		{
 			g_env.status = 255;
-			(ft_putendl_fd("exit", 1), exit(g_env.status));
+			(exit(g_env.status));
 		}
 		g_env.status = i;
 		(ft_putendl_fd("exit", 1), exit(g_env.status));

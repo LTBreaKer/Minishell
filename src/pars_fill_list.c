@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 21:11:11 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/12 14:45:55 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/15 14:50:21 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_cmd	*ft_lstfinalnew(void)
 		return (NULL);
 	new->in = -2;
 	new->out = -2;
-	new->err = -2;
+	new->wf = 0;
 	new->args = NULL;
 	new->heredoc = NULL;
 	new->next = NULL;

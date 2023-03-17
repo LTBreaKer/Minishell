@@ -4,6 +4,10 @@ CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address #-lreadline
 
 RM = rm -f
 
+LDFLAGS= -L /Users/aharrass/goinfre/homebrew/opt/readline/lib
+
+CPPFLAGS= -I /Users/aharrass/goinfre/homebrew/opt/readline/include
+
 LIBFT = ./libft
 
 LIBFT_AR = ./libft/libft.a
@@ -24,7 +28,11 @@ SR =	echo.c		\
 			ft_lst.c	\
 			err.c			\
 			exit.c		\
+			heredoc.c	\
+			sigs.c		\
 			execution.c	\
+			get_next_line.c	\
+			get_next_line_utils.c	\
 			pars_fill_list.c	\
 			pars_lexer.c	\
 			pars_lexer_utils.c	\
@@ -38,15 +46,15 @@ SRCS = $(addprefix ${SR_PATH}, ${SR})
 
 OBJS = $(addprefix ${OB_PATH}, ${SR:.c=.o})
 
-all	:	${NAME}
+all	: ${NAME}
 
 ${OB_PATH}%.o	:	${SR_PATH}%.c
 			@mkdir -p ${OB_PATH}
-			cc ${CFLAGS} -c $< -o $@
+			cc ${CFLAGS} ${INCLUDE} -c $< -o $@ 
 
 ${NAME}	:	${OBJS}
 	make -C ${LIBFT}
-	cc ${CFLAGS} ${INCLUDE} -o ${NAME} ${OBJS} ${LIBFT_AR} -lreadline
+	cc ${CFLAGS} ${CPPFLAGS} ${LDFLAGS} ${INCLUDE} ${OBJS} ${LIBFT_AR} -lreadline -o ${NAME}
 
 clean:
 			make clean -C ${LIBFT}

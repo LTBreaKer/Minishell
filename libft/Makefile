@@ -6,7 +6,7 @@
 #    By: aharrass <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/06 20:48:11 by aharrass          #+#    #+#              #
-#    Updated: 2023/03/11 18:57:48 by aharrass         ###   ########.fr        #
+#    Updated: 2023/03/16 20:56:50 by aharrass         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,7 @@ all:		${NAME}
 
 ${OB_PATH}%.o : %.c
 			@mkdir -p ${OB_PATH}
-			cc -c $< -o $@
+			cc ${CFLAGS} -c $< -o $@
 
 ${NAME}:	${OBJS}
 			ar -rcs ${NAME} ${OBJS}
