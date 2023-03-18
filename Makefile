@@ -29,8 +29,8 @@ SR =	echo.c		\
 			err.c			\
 			exit.c		\
 			heredoc.c	\
-			sigs.c		\
 			execution.c	\
+			sigs.c		\
 			get_next_line.c	\
 			get_next_line_utils.c	\
 			pars_fill_list.c	\

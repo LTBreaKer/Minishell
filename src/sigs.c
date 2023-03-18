@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 18:17:54 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/17 22:30:11 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/18 16:18:00 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,14 @@ void	sigint_handler(int sig)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
+	if (g_env.pid)
+	{
+		while (g_env.pid[i])
+		{
+			kill(g_env.pid[i], SIGINT);
+			i++;
+		}
+	}
 	g_env.status = 1;
 }
 

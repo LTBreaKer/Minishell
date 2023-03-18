@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 18:06:02 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/14 14:46:25 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/17 22:44:13 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	ft_cd(char *dir)
 	if (!dir)
 	{
 		ft_putstr_fd("cd: HOME not set\n", 2);
+		g_env.status = 1;
 		return (1);
 	}
 	if (!*dir)
@@ -43,6 +44,7 @@ int	ft_cd(char *dir)
 		if (chdir(ft_get_value("OLDPWD")) == -1)
 		{
 			ft_putstr_fd("cd: OLDPWD not set\n", 2);
+			g_env.status = 1;
 			free(pwd);
 			free(dir);
 			return (1);
@@ -53,6 +55,7 @@ int	ft_cd(char *dir)
 	else if (chdir(dir) == -1)
 	{
 		ft_putstr_fd("cd: no such file or directory: ", 2);
+		g_env.status = 1;
 		ft_putendl_fd(dir, 2);
 		free(pwd);
 		free(dir);
