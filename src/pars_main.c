@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:54:13 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/18 16:16:37 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/18 21:27:24 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ int	main(int ac, char **av, char **envp)
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, sigquit_handler);
 	lst_final = NULL;
+	g.tmp = NULL;
 	g_env.export = NULL;
 	make_env(envp);
 	while ((g.line = readline("\033[32;1mminishell-$ \033[0m")) != NULL)
@@ -58,14 +59,16 @@ int	main(int ac, char **av, char **envp)
 			}
 			else
 			{
-				expand_me(g.splited2);
+				expand_me(&g);
 				fill_the_list(&g, &lst_final);
+				free(g.deleted);
 				// tmp = lst_final;
 				// while (tmp)
 				// {
 				// 	int i = 0;
 				// 	printf("{in : %d}\n", tmp->in);
 				// 	printf("{out : %d}\n", tmp->out);
+				// 	printf("{wf : %d}\n", tmp->wf);
 				// 	if (tmp->args)
 				// 	{
 				// 		while (tmp->args[i])
@@ -124,9 +127,6 @@ int	main(int ac, char **av, char **envp)
 		free(g.line);
 	}
 	if (g.line == NULL)
-	{
-		printf("exit\n");
-		exit(g_env.status);
-	}
+		ft_exit(NULL, 0);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_expander.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:19:22 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/14 19:28:09 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/18 16:25:36 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,18 @@ char	*get_target(char *s, int idx)
 	dolar = idx;
 	i = 0;
 	len = 0;
-	while (s[idx] && s[idx] != ' '
-	&& s[idx] != '\t' && s[idx] != '\n'
-	&& s[idx] != 34 && s[idx] != 39
-	&& s[idx] != '$')
+	// s[idx] != ' '
+	// && s[idx] != '\t' && s[idx] != '\n'
+	// && s[idx] != 34 && s[idx] != 39
+	// && s[idx] != '$')
+	if (s[idx] == '$')
+	{
+		ret = malloc (sizeof(char) + 1);
+		ret[1] = '\0';
+		ret[0] = '$';
+		return (ret);
+	}
+	while ((s[idx] && ft_isalnum(s[idx])) || s[idx] == '_')
 	{
 		len++;
 		idx++;
@@ -93,7 +101,7 @@ char	*get_target(char *s, int idx)
 	return (ret);
 }
 
-char	*go_xpnd(char *s, int idx)
+char	*go_xpnd(t_lex *g, char *s, int idx)
 {
 	char	*target;
 	char	*value;
@@ -103,36 +111,111 @@ char	*go_xpnd(char *s, int idx)
 	int		i;
 	int		j;
 	int		dol;
+	int		solo;
 
 	i = 0;
 	j = 0;
 	len = 0;
+	solo = 0;
 	dol = idx + 1;
 	idx++;
+	// ================================ echoo $? =================== //
+	if (s[idx] == '?')
+	{
+		value = ft_itoa(g_env.status);
+		len = ft_strlen(value);
+		ret_len = ft_strlen(s) - 2 + len;
+		ret = malloc (sizeof(char) * (ret_len + 1));
+		while (i < dol - 1)
+		{
+			ret[i] = s[i];
+			i++;
+		}
+		while (value[j])
+		{
+			ret[i] = value[j];
+			i++;
+			j++;
+		}
+		j = dol + 1;
+		while (s[j])
+		{
+			ret[i] = s[j];
+			i++;
+			j++;
+		}
+		free(value);
+		return (ret);
+	}
 	target = get_target(s, idx);
-	if (*target == '?' && *(target + 1) == 0)
-		return (free(target), ft_itoa(g_env.status));
-	while (s[idx] && s[idx] != ' ' && s[idx] != '\t' && s[idx] != '\n' && s[idx] != 34 && s[idx] != 39 && s[idx] != '$')
+	// ================================ echo $$ =================== //
+	if (target[0] == '$')
+	{
+		free(target);
+		ret_len = ft_strlen(s) - (len + 2);
+		ret = malloc (sizeof(char) * (ret_len + 1));
+		ret[ret_len] = '\0';
+		while (i < dol - 1)
+		{
+			ret[i] = s[i];
+			i++;
+		}
+		j = dol + len + 1;
+		while (s[j])
+		{
+			ret[i] = s[j];
+			i++;
+			j++;
+		}
+		return (ret);
+	}
+	else if (target[0] == '\0')	// ================================ echoo $USER$ =================== //
+	{
+		free(target);
+		g->here = 1;
+		ret_len = ft_strlen(s);
+		ret = malloc (sizeof(char) * (ret_len + 1));
+		ret[ret_len] = '\0';
+		while (i < ret_len)
+		{
+			ret[i] = s[i];
+			i++;
+		}
+		return (ret);
+	}
+	while ((s[idx] && ft_isalnum(s[idx])) || s[idx] == '_')
 	{
 		len++;
 		idx++;
 	}
-	// free target
-	// while (i < len )
-	// {
-	// 	target[i] = s[dol];
-	// 	i++;
-	// 	dol++;
-	// }
+	if (dol == 1 && s[idx] == '\0')
+		solo = 1;
 	value = ft_get_value(target);
-	if (!value)
+	if (!value && solo)
 	{
 		free(target);
 		return (NULL);
 	}
-	// printf("s     		: %s\ns      address = %p\n", s, s);
-	// printf("targDt      : %s\ntarget address = %p\n", target, target);
-	// printf("------------------\n");
+	else if (!value && !solo)
+	{
+		free(target);
+		ret_len = ft_strlen(s) - (len + 1);
+		ret = malloc (sizeof(char) * (ret_len + 1));
+		ret[ret_len] = '\0';
+		while (i < dol - 1)
+		{
+			ret[i] = s[i];
+			i++;
+		}
+		j = dol + len;
+		while (s[j])
+		{
+			ret[i] = s[j];
+			i++;
+			j++;
+		}
+		return (ret);
+	}
 	free(target);
 	ret_len = ft_strlen(s) - (len + 1) + ft_strlen(value);
 	ret = malloc (sizeof(char) * (ret_len + 1));
@@ -160,7 +243,27 @@ char	*go_xpnd(char *s, int idx)
 	return (ret);
 }
 
-char	*exec_expand(char **args)
+void	shifting(char **args, int j)
+{
+	int g;
+	int i;
+
+	i = 0;
+	g = j;
+	//free(args[j]);
+	while (args[j])
+	{
+		if (i == 0)
+		{
+			free(args[g]);
+			i = 1;
+		}
+		args[j] = args[j + 1];
+		j++;
+	}
+}
+
+char	*exec_expand(t_lex *g)
 {
 	char	*ret;
 	int		on;
@@ -170,35 +273,43 @@ char	*exec_expand(char **args)
 
 	j = 0;
 	ret = NULL;
-	while (args[j])
+	while (g->splited2[j])
 	{
 		i = 0;
 		doc = 0;
-		if (!ft_strcmp(args[j], "<<"))
+		if (!ft_strcmp(g->splited2[j], "<<"))
 		{
 			doc = 1;
+			g->deleted[j] = 't';
 			j++;
 		}
-		while (args[j][i])
+		while (g->splited2[j] && g->splited2[j][i])
 		{
 			if (on == 1)
 				i = 0;
 			on = 0;
-			if (args[j][i] == '$')
+			g->here = 0;
+			if (g->splited2[j] && g->splited2[j][i] == '$')
 			{
-				if (xpnd_status(args[j], i) == 0 && doc == 0)
+				if (xpnd_status(g->splited2[j], i) == 0 && doc == 0)
 				{
-					ret = go_xpnd(args[j], i);
+					ret = go_xpnd(g, g->splited2[j], i);
 					if (ret)
 					{
-						free(args[j]);
-						args[j] = ft_strdup(ret);
+						free(g->splited2[j]);
+						g->splited2[j] = ft_strdup(ret);
+						g->deleted[j] = 't';
 						free(ret);
-						on = 1;
 					}
+					else
+					{
+						g->deleted[j] = 'f';
+						shifting(g->splited2, j);
+					}
+					on = 1;
 				}
 			}
-			if (on == 0)
+			if (on == 0 || g->here == 1)
 				i++;
 		}
 		j++;
@@ -206,8 +317,17 @@ char	*exec_expand(char **args)
 	return 0;
 }
 
-void	expand_me(char **args)
+void	expand_me(t_lex *g)
 {
-	exec_expand(args);
+	int	i;
+	int	len;
+
+	i = -1;
+	len = ft_double_strlen(g->splited2);
+	g->deleted = malloc (sizeof(char) * len + 1);
+	g->deleted[len] = '\0';
+	while (++i < len)
+		g->deleted[i] = 'x';
+	exec_expand(g);
 }
 

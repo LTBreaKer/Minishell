@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 18:05:14 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/15 14:50:57 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/18 21:27:08 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	ft_exit(char **args, int check)
 
 	i = 0;
 	
-	if (args[1])
+	if (args && args[1])
 	{
 		while (args[1][i])
 		{

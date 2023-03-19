@@ -6,13 +6,14 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 21:19:47 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/11 18:57:24 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/18 20:20:17 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
 # include <stdlib.h>
+# include <stdio.h>
 # include <unistd.h>
 
 typedef struct s_data

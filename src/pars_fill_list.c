@@ -6,147 +6,114 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 21:11:11 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/15 14:50:21 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/18 17:30:41 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-t_cmd	*ft_lstfinalnew(void)
+void	fill_args_helper(t_lex *g, t_cmd *new)
 {
-	t_cmd	*new;
-
-	new = malloc(sizeof(t_cmd));
-	if (!new)
-		return (NULL);
-	new->in = -2;
-	new->out = -2;
-	new->wf = 0;
-	new->args = NULL;
-	new->heredoc = NULL;
-	new->next = NULL;
-	return (new);
-}
-
-t_cmd	*ft_lstlast(t_cmd	*s)
-{
-	if (!s)
-		return (s);
-	while (s->next)
-		s = s->next;
-	return (s);
-}
-
-void	ft_lstadd_backfinal(t_cmd **env, t_cmd *new)
-{
-	t_cmd	*tmp;
-
-	if (!*env)
+	g->i--;
+	if (new->args != NULL)
 	{
-		*env = new;
-		return ;
+		free_sub_split(new->args);
+		new->args = ft_split_qk(g->full_cmd, ' ');
 	}
-	tmp = ft_lstlast(*env);
-	tmp->next = new;
+	else
+		new->args = ft_split_qk(g->full_cmd, ' ');
+}
+
+void	fill_args_helper2(t_lex *g)
+{
+	g->full_cmd = ft_strjoin3(g->full_cmd, " ");
+	g->full_cmd = ft_strjoin3(g->full_cmd, "-n");
+}
+
+void	fill_args(t_lex *g, t_cmd *new)
+{
+	g->idx = 0;
+	g->k = 1;
+	while (g->splited2[g->i] && ft_strcmp(g->splited2[g->i], "<<")
+		&& ft_strcmp(g->splited2[g->i], "<")
+		&& ft_strcmp(g->splited2[g->i], ">>")
+		&& ft_strcmp(g->splited2[g->i], ">")
+		&& ft_strcmp(g->splited2[g->i], "|"))
+	{
+		g->full_cmd = ft_strjoin3(g->full_cmd, g->splited2[g->i]);
+		if (!ft_strcmp(g->full_cmd, "echo") && g->idx == 0)
+		{
+			g->idx = 1;
+			while (g->splited2[g->k] && check_dash_n(g->splited2[g->k]) != 0)
+			{
+				g->k++;
+				g->i++;
+				g->idx = 2;
+			}
+			if (g->idx == 2)
+				fill_args_helper2(g);
+		}
+		g->full_cmd = ft_strjoin3(g->full_cmd, " ");
+		g->i++;
+	}
+	fill_args_helper(g, new);
+}
+
+void	distribution(t_lex *g, t_cmd *new)
+{
+	while (g->splited2[g->i] && ft_strcmp(g->splited2[g->i], "|"))
+	{
+		if (ft_strcmp(g->splited2[g->i], "<<")
+			&& ft_strcmp(g->splited2[g->i], "<")
+			&& ft_strcmp(g->splited2[g->i], ">>")
+			&& ft_strcmp(g->splited2[g->i], ">")
+			&& ft_strcmp(g->splited2[g->i], "|"))
+			fill_args(g, new);
+		else if (!ft_strcmp(g->splited2[g->i], ">"))
+			fill_rr(g, new);
+		else if (!ft_strcmp(g->splited2[g->i], "<"))
+			fill_lr(g, new);
+		else if (!ft_strcmp(g->splited2[g->i], ">>"))
+			fill_append(g, new);
+		else if (!ft_strcmp(g->splited2[g->i], "<<"))
+			fill_heredoc(g, new);
+		if (g->ambg == 1)
+		{
+			while (g->splited2[g->i] && ft_strcmp(g->splited2[g->i], "|"))
+				g->i++;
+		}
+		else
+			if (g->splited2[g->i])
+				g->i++;
+	}
 }
 
 void	fill_the_list(t_lex *g, t_cmd **lst_final)
 {
 	t_cmd	*new;
-	char	*full_cmd;
-	char	*full_heredoc;
-	int	i = 0;
 
-	while (g->splited2[i])
+	g->i = 0;
+	while (g->splited2[g->i])
 	{
+		g->ambg = 0;
 		new = ft_lstfinalnew();
-		full_cmd = ft_strdup("");
-		full_heredoc = ft_strdup("");
-		while (g->splited2[i] && ft_strcmp(g->splited2[i], "|"))
+		g->full_cmd = ft_strdup("");
+		g->full_heredoc = ft_strdup("");
+		distribution(g, new);
+		if (g->full_cmd)
+			free(g->full_cmd);
+		if (!*g->full_heredoc)
 		{
-			if (ft_strcmp(g->splited2[i], "<<") && ft_strcmp(g->splited2[i], "<") && ft_strcmp(g->splited2[i], ">>") && ft_strcmp(g->splited2[i], ">") && ft_strcmp(g->splited2[i], "|"))
-			{
-				while (g->splited2[i] && ft_strcmp(g->splited2[i], "<<") && ft_strcmp(g->splited2[i], "<") && ft_strcmp(g->splited2[i], ">>") 
-						&& ft_strcmp(g->splited2[i], ">") && ft_strcmp(g->splited2[i], "|"))
-				{
-					full_cmd = ft_strjoin3(full_cmd, g->splited2[i]);
-					full_cmd = ft_strjoin3(full_cmd, " ");
-					i++;
-				}
-				i--;
-				new->args = ft_split_qk(full_cmd, ' ');
-				free(full_cmd);
-			}
-			else if (!ft_strcmp(g->splited2[i], ">"))
-			{
-				if (!ft_strcmp(g->splited2[i + 1], "|"))
-				{
-					i++;
-					new->out = open(g->splited2[i + 1], O_CREAT | O_RDONLY | O_WRONLY | O_TRUNC, 0644);
-					if (new->out == -1)
-					{
-						printf("Minishell: ");
-						perror(g->splited2[i + 2]);
-					}
-				}
-				else
-				{
-					new->out = open(g->splited2[i + 1], O_CREAT | O_WRONLY | O_RDONLY | O_TRUNC, 0644);
-					if (new->out == -1)
-					{
-						printf("%s\n", g->splited2[i + 1]);
-						printf("Minishell: ");
-						perror(g->splited2[i + 1]);
-					}
-				}
-				i++;
-			}
-			else if (!ft_strcmp(g->splited2[i], "<"))
-			{
-				if (!ft_strcmp(g->splited2[i + 1], ">"))
-					i++;
-				new->in = open(g->splited2[i + 1], O_RDONLY);
-				if (new->in == -1)
-				{
-					printf("Minishell: ");
-					perror(g->splited2[i + 1]);
-				}
-				i++;
-			}
-			else if (!ft_strcmp(g->splited2[i], ">>"))
-			{
-				new->out = open(g->splited2[i + 1], O_CREAT | O_APPEND | O_RDWR, 0644);
-				if (new->out == -1)
-				{
-					printf("Minishell: ");
-					perror(g->splited2[i + 1]);
-				}
-				i++;
-			}
-			else if (!ft_strcmp(g->splited2[i], "<<"))
-			{
-				i++;
-				full_heredoc = ft_strjoin3(full_heredoc, g->splited2[i]);
-				full_heredoc = ft_strjoin3(full_heredoc, " ");
-			}
-			if (g->splited2[i])
-				i++;
+			free (g->full_heredoc);
+			g->full_heredoc = NULL;
 		}
-		if (!*full_heredoc)
+		if (g->full_heredoc)
 		{
-			free (full_heredoc);
-			full_heredoc = NULL;
+			new->heredoc = ft_split_qk(g->full_heredoc, ' ');
+			free(g->full_heredoc);
 		}
-		if (full_heredoc)
-		{
-			
-			new->heredoc = ft_split_qk(full_heredoc, ' ');
-			free(full_heredoc);
-		}
-		else
-			new->heredoc = NULL;
 		ft_lstadd_backfinal(lst_final, new);
-		if (g->splited2[i])
-			i++;
+		if (g->splited2[g->i])
+			g->i++;
 	}
 }

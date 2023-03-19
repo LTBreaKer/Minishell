@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_syntax_error.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 19:52:19 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/09 15:51:36 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/16 16:29:39 by rel-mham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,13 +97,13 @@ void	red_syntax_helper2(t_lex *g)
 	if (g->line[g->k] == 39)
 	{
 		g->k++;
-		while (g->line[g->k] != 39)
+		while (g->line[g->k] != 39 && g->line[g->k])
 			g->k++;
 	}
 	else if (g->line[g->k] == 34)
 	{
 		g->k++;
-		while (g->line[g->k] != 34)
+		while (g->line[g->k] != 34 && g->line[g->k])
 			g->k++;
 	}
 	else if (g->line[g->k] == '<' || g->line[g->k] == '>')

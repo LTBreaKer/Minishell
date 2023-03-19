@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 17:24:37 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/18 15:41:31 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/18 19:04:03 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ void	heredoc(t_cmd *cmd)
 			g_env.h_id = fork();
 			if (g_env.h_id == 0)
 			{
-				signal(SIGINT, SIG_DFL);
-				signal(SIGQUIT, SIG_DFL);
+				//signal(SIGINT, SIG_DFL);
+				//signal(SIGQUIT, SIG_DFL);
 				while (tmp->heredoc[i])
 				{
 					len = ft_strlen(tmp->heredoc[i]);
@@ -73,11 +73,8 @@ void	heredoc(t_cmd *cmd)
 						h = 0;
 						if (!tmp->heredoc[i + 1])
 						{
-							while (line[h])
-							{
-								write(tmp->herepipe[1], &line[h], 1);
-								h++;
-							}
+							line = here_expand(line);
+							ft_putstr_fd(line, tmp->herepipe[1]);
 						}
 						free(line);
 						ft_putstr_fd("> ", 2);

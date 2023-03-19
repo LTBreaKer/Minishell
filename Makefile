@@ -1,6 +1,6 @@
 NAME = minishell
 
-CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address #-lreadline
+CFLAGS = -Wall -Wextra -Werror #-g #-fsanitize=address #-lreadline
 
 RM = rm -f
 
@@ -31,9 +31,12 @@ SR =	echo.c		\
 			heredoc.c	\
 			execution.c	\
 			sigs.c		\
+			here_expnd.c	\
 			get_next_line.c	\
 			get_next_line_utils.c	\
 			pars_fill_list.c	\
+			pars_flist_utils.c	\
+			pars_flist_stack.c	\
 			pars_lexer.c	\
 			pars_lexer_utils.c	\
 			pars_stack_func.c	\
@@ -41,6 +44,7 @@ SR =	echo.c		\
 			pars_expander.c	\
 			pars_main.c	\
 			pars_qcleaner.c \
+			pars_clone_qcleaner.c \
 			
 SRCS = $(addprefix ${SR_PATH}, ${SR})
 

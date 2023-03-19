@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 15:01:31 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/17 22:26:44 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/18 19:03:34 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 # include <string.h>
 # include <sys/errno.h>
 # include <sys/wait.h>
-# include <unistd.h>
 # include <termios.h>
+# include <unistd.h>
 
 typedef struct s_stack
 {
@@ -46,12 +46,16 @@ typedef struct s_lex
 	int				sq;
 	int				dq;
 	int				id;
-	char			**splited1;
+	char			*deleted;
 	char			**splited2;
 	char			**sub_split;
 	char			*line;
+	int				ambg;
+	char			*full_cmd;
+	char			*full_heredoc;
 	char			*new_line_tmp;
 	char			*new_line_join;
+	char			*tmp;
 }					t_lex;
 
 //----------------------------------//
@@ -121,6 +125,7 @@ void				heredoc(t_cmd *cmd);
 int					ft_execute(t_cmd *cmd, char **envp);
 void				sigint_handler(int sig);
 void				sigquit_handler(int sig);
+char				*here_expand(char *s);
 
 //-----------------PARSING-----------------//
 
@@ -138,6 +143,16 @@ void				add_push(t_stack **lst, char c);
 void				free_lst(t_stack *lst);
 void				ft_lstadd_front(t_stack **lst, t_stack *new);
 void				fill_the_list(t_lex *g, t_cmd **lst_final);
-void				expand_me(char **args);
+void				expand_me(t_lex *g);
 void				clean_me(t_lex *g, char **args);
+int					check_dash_n(char *str);
+t_cmd				*ft_lstfinalnew(void);
+void				ft_lstadd_backfinal(t_cmd **env, t_cmd *new);
+void				fill_lr(t_lex *g, t_cmd *new);
+void				fill_rr(t_lex *g, t_cmd *new);
+void				fill_append(t_lex *g, t_cmd *new);
+void				fill_heredoc(t_lex *g, t_cmd *new);
+int					ambig_check(char c, char *s);
+char				*clean_quotes(t_lex *g, char *s);
+char				*clean_quotes2(char *s);
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_lexer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 17:16:19 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/12 20:47:12 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/15 16:59:49 by rel-mham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,6 @@ void	lex_helper2(t_lex *g, t_stack **lst)
 
 void	lex_helper3(t_lex *g, t_stack **lst)
 {
-	// if (g->line[g->idx] == '|' && g->line[g->idx + 1] == '|')
-	// {
-	// 	add_push(lst, g->line[g->idx]);
-	// 	g->idx--;
-	// }
 	if (g->line[g->idx] == '<' && g->line[g->idx + 1] == '<')
 	{
 		add_push(lst, g->line[g->idx]);
@@ -92,7 +87,6 @@ int	lex(t_lex *g)
 	}
 	g->new_line_tmp = lst_to_str(lst);
 	free_lst(lst);
-	// printf("%s\n", g->new_line_tmp);
 	g->splited2 = ft_split_qk(g->new_line_tmp, ' ');
 	free(g->new_line_tmp);
 	if (g->splited2[0][0] == '\0')

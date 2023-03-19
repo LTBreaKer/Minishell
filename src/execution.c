@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:25:21 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/17 21:32:49 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/19 15:59:19 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,7 @@ int	ft_execute(t_cmd *cmd, char **envp)
 	int		i;
 	char	*cmd_path;
 	int		s;
+	DIR		*direc;
 	t_cmd	*tmp;
 
 	i = 0;
@@ -206,10 +207,10 @@ int	ft_execute(t_cmd *cmd, char **envp)
 				return (perror("fork"), 1);
 			if (g_env.pid[i] == 0)
 			{
-				signal(SIGINT, SIG_DFL);
-				signal(SIGQUIT, SIG_DFL);
+				// signal(SIGINT, SIG_DFL);
+				// signal(SIGQUIT, SIG_DFL);
 				if (!tmp->args)
-					exit(0);
+					exit(1);
 				if (tmp->in == -1 || tmp->out == -1)
 					exit(1);
 				if (i == 0)
@@ -244,13 +245,21 @@ int	ft_execute(t_cmd *cmd, char **envp)
 						(dup2(tmp->out, 1), close(tmp->out));
 					close(pipes[i - 1][0]);
 				}
-				if (tmp->heredoc)
+				if (tmp->heredoc && tmp->wf == 1)
 				{
 					dup2(tmp->herepipe[0], 0);
 					close(tmp->herepipe[0]);
 					close(tmp->herepipe[1]);
 				}
 				//check command
+				if ((direc = opendir(tmp->args[0])) != NULL)
+				{
+					closedir(direc);
+					write(2, "minishell: ", 11);
+					write(2, tmp->args[0], ft_strlen(tmp->args[0]));
+					write(2, ": is a directory\n", 17);
+					exit(126);
+				}
 				if (!built_in(tmp))
 					exit(0);
 				else
@@ -297,6 +306,7 @@ int	ft_execute(t_cmd *cmd, char **envp)
 					close(pipes[i - 1][1]);
 				}
 				i++;
+				free(tmp->herepipe);
 				tmp = tmp->next;
 				
 			}
