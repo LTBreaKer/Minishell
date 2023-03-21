@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 15:01:31 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/18 19:03:34 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/20 17:49:43 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void				ft_env_remove(t_env **env, char *var);
 int					count_cmd(t_cmd *cmd);
 void				ft_error(char *str);
 char				**get_var(char *var);
-void				heredoc(t_cmd *cmd);
+int					heredoc(t_cmd *cmd);
 int					ft_execute(t_cmd *cmd, char **envp);
 void				sigint_handler(int sig);
 void				sigquit_handler(int sig);

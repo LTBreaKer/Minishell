@@ -1,6 +1,6 @@
 NAME = minishell
 
-CFLAGS = -Wall -Wextra -Werror #-g #-fsanitize=address #-lreadline
+CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address #-lreadline
 
 RM = rm -f
 
@@ -30,8 +30,8 @@ SR =	echo.c		\
 			exit.c		\
 			heredoc.c	\
 			execution.c	\
-			sigs.c		\
 			here_expnd.c	\
+			sigs.c		\
 			get_next_line.c	\
 			get_next_line_utils.c	\
 			pars_fill_list.c	\

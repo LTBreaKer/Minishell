@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_lexer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 17:16:19 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/15 16:59:49 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/19 19:10:12 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	lex(t_lex *g)
 		// must free
 		//must check the exit status
 		printf("quotes error \n");
-		g_env.status = 111;
+		g_env.status = 255;
 		return (1);
 	}
 	// expand_me(g);

@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:54:13 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/18 21:27:24 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/21 18:05:10 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	main(int ac, char **av, char **envp)
 	(void)ac;
 	(void)av;
 	t_lex	g;
+	struct termios	term;
+	struct termios	term2;
 	t_cmd	*lst_final;
 	char	*err;
 	int		lx;
@@ -42,11 +44,20 @@ int	main(int ac, char **av, char **envp)
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, sigquit_handler);
 	lst_final = NULL;
+	tcgetattr(0, &term);
+	term2 = term;
+	term.c_lflag &= ~ISIG;
+	term.c_lflag &= ~ECHOCTL;
 	g.tmp = NULL;
 	g_env.export = NULL;
 	make_env(envp);
-	while ((g.line = readline("\033[32;1mminishell-$ \033[0m")) != NULL)
+	while (1)
 	{
+		tcsetattr(0, TCSANOW, &term);
+		g.line = readline("\033[32;1mminishell-$ \033[0m");
+		tcsetattr(0, TCSANOW, &term2);
+		if (g.line == NULL)
+			ft_exit(NULL, 0);
 		lx = lex(&g);
 		if (lx == 3)
 		{
@@ -62,36 +73,38 @@ int	main(int ac, char **av, char **envp)
 				expand_me(&g);
 				fill_the_list(&g, &lst_final);
 				free(g.deleted);
-				// tmp = lst_final;
-				// while (tmp)
-				// {
-				// 	int i = 0;
-				// 	printf("{in : %d}\n", tmp->in);
-				// 	printf("{out : %d}\n", tmp->out);
-				// 	printf("{wf : %d}\n", tmp->wf);
-				// 	if (tmp->args)
-				// 	{
-				// 		while (tmp->args[i])
-				// 		{
-				// 			printf("{arg%d : %s}\n", i, tmp->args[i]);
-				// 			i++;
-				// 		}
-				// 	}
-				// 	i = 0;
-				// 	if (!tmp->heredoc)
-				// 				printf("{her doc : %s}\n}", (char *)tmp->heredoc);
-				// 	if (tmp->heredoc)
-				// 	{
-				// 		while (tmp->heredoc[i])
-				// 		{
+				tmp = lst_final;
+				while (tmp)
+				{
+					int i = 0;
+					printf("{in : %d}\n", tmp->in);
+					printf("{out : %d}\n", tmp->out);
+					printf("{wf : %d}\n", tmp->wf);
+					if (tmp->args)
+					{
+						while (tmp->args[i])
+						{
+							printf("{arg%d : %s}\n", i, tmp->args[i]);
+							i++;
+						}
+					}
+					else
+						printf("{arg : NULL}\n");
+					i = 0;
+					if (!tmp->heredoc)
+								printf("{her doc : %s}\n}", (char *)tmp->heredoc);
+					if (tmp->heredoc)
+					{
+						while (tmp->heredoc[i])
+						{
 							
-				// 			printf("{here doc %d : %s}\n", i, (char *)tmp->heredoc[i]);
-				// 			i++;
-				// 		}
-				// 	}
-				// 	printf("------------------------------\n");
-				// 	tmp = tmp->next;
-				// }
+							printf("{here doc %d : %s}\n", i, (char *)tmp->heredoc[i]);
+							i++;
+						}
+					}
+					printf("------------------------------\n");
+					tmp = tmp->next;
+				}
 				freee_sub_split(g.splited2);
 				//freee_sub_split(g.splited1);
 			}
@@ -126,7 +139,6 @@ int	main(int ac, char **av, char **envp)
 		}
 		free(g.line);
 	}
-	if (g.line == NULL)
-		ft_exit(NULL, 0);
+	
 	return (0);
 }

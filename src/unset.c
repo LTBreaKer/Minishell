@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 10:23:55 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/09 09:35:55 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/21 16:01:51 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	ft_unset(char **args)
 	while (args[i])
 	{
 		if (ft_check_name1(args[i]))
-			return (1);
+			return ((void)(g_env.status = 1), 1);
 		ft_env_remove(&g_env.env, args[i]);
 		ft_lstremove(&g_env.export, args[i]);
 		i++;

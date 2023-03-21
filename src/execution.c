@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:25:21 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/19 15:59:19 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/21 18:52:53 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,35 @@ int	built_in(t_cmd *cmd)
 	return (1);
 }
 
+void	ft_closep(t_cmd *tmp, int **pipes, int i)
+{
+				close(tmp->in);
+				close(tmp->out);
+				if (tmp->herepipe)
+				{
+					close(tmp->herepipe[0]);
+					close(tmp->herepipe[1]);
+					free(tmp->herepipe);
+				}
+				if (i == 0)
+				{
+					if (pipes)
+						close(pipes[i][1]);
+				}
+				else if (i == g_env.cmd_count - 1)
+				{
+					close(tmp->in);
+					close(pipes[i - 1][0]);
+					close(pipes[i - 1][1]);
+				}
+				else if (i != 0)
+				{
+					close(pipes[i][1]);
+					close(pipes[i - 1][0]);
+					close(pipes[i - 1][1]);
+				}
+}
+
 int	ft_execute(t_cmd *cmd, char **envp)
 {
 	int		**pipes;
@@ -175,9 +204,20 @@ int	ft_execute(t_cmd *cmd, char **envp)
 	if (!g_env.pid)
 		return (perror("malloc"), 1);
 	
-	heredoc(cmd);
+	if (heredoc(cmd))
+		return (1);
 	while (tmp)
 	{
+		if (!tmp->args)
+		{
+			ft_putstr_fd("i = ", 2);
+			ft_putnbr_fd(i, 2);
+			ft_putstr_fd("\n", 2);
+			ft_closep(tmp, pipes, i);
+			i++;
+			tmp = tmp->next;
+			continue;
+		}
 		if (cmd->args && ft_strncmp(tmp->args[0], "exit", 4) == 0
 					&& tmp->args[0][4] == '\0' && cmd->next == NULL)
 		{
@@ -207,8 +247,8 @@ int	ft_execute(t_cmd *cmd, char **envp)
 				return (perror("fork"), 1);
 			if (g_env.pid[i] == 0)
 			{
-				// signal(SIGINT, SIG_DFL);
-				// signal(SIGQUIT, SIG_DFL);
+				signal(SIGINT, SIG_DFL);
+				signal(SIGQUIT, SIG_DFL);
 				if (!tmp->args)
 					exit(1);
 				if (tmp->in == -1 || tmp->out == -1)
@@ -216,7 +256,7 @@ int	ft_execute(t_cmd *cmd, char **envp)
 				if (i == 0)
 				{
 					if (tmp->next)
-						(dup2(pipes[i][1], 1), close(pipes[i][1]));
+						(dup2(pipes[i][1], 1), close(pipes[i][1]), close(pipes[i][0]));
 					if (tmp->in != -2)
 						(dup2(tmp->in, 0), close(tmp->in));
 					if (tmp->out != -2)
@@ -236,14 +276,13 @@ int	ft_execute(t_cmd *cmd, char **envp)
 				{
 					close(pipes[i - 1][1]);
 					dup2(pipes[i - 1][0], 0);
-					close(pipes[i][0]);
+					close(pipes[i - 1][0]);
 					if (tmp->next)
-						(dup2(pipes[i][1], 1), close(pipes[i][1]));
+						(dup2(pipes[i][1], 1), close(pipes[i][1]), close(pipes[i][0]));
 					if (tmp->in != -2)
 						(dup2(tmp->in, 0), close(tmp->in));
 					if (tmp->out != -2)
 						(dup2(tmp->out, 1), close(tmp->out));
-					close(pipes[i - 1][0]);
 				}
 				if (tmp->heredoc && tmp->wf == 1)
 				{
@@ -251,6 +290,7 @@ int	ft_execute(t_cmd *cmd, char **envp)
 					close(tmp->herepipe[0]);
 					close(tmp->herepipe[1]);
 				}
+					
 				//check command
 				if ((direc = opendir(tmp->args[0])) != NULL)
 				{
@@ -264,51 +304,20 @@ int	ft_execute(t_cmd *cmd, char **envp)
 					exit(0);
 				else
 				{
-					
 					cmd_path = get_cmd(tmp);
 					if (!cmd_path)
 						(ft_error(tmp->args[0]), exit(127));
-					execve(cmd_path, tmp->args, envp);
-					write(2, "minishell: ", 11);
-					(perror(tmp->args[0]), exit(126));
+					if (execve(cmd_path, tmp->args, envp) == -1)
+						(write(2, "minishell: ", 11),
+						perror(tmp->args[0]), exit(126));
+					exit(0);
 				}
 			}
 			else
 			{
-				
-				int t = tmp->in;
-				close(tmp->in);
-				close(tmp->out);
-				if (tmp->herepipe)
-				{
-					close(tmp->herepipe[0]);
-					close(tmp->herepipe[1]);
-				}
-				if (i == 0)
-				{
-					if (pipes)
-					{
-						//close(pipes[i][0]);
-						close(pipes[i][1]);
-					}
-				}
-				else if (i == g_env.cmd_count - 1)
-				{
-					//close(tmp->in);
-					close(t);
-					close(pipes[i - 1][0]);
-					close(pipes[i - 1][1]);
-				}
-				else if (i != 0)
-				{
-					close(pipes[i][1]);
-					close(pipes[i - 1][0]);
-					close(pipes[i - 1][1]);
-				}
+				ft_closep(tmp, pipes, i);
 				i++;
-				free(tmp->herepipe);
 				tmp = tmp->next;
-				
 			}
 		}
 	}
@@ -318,20 +327,15 @@ int	ft_execute(t_cmd *cmd, char **envp)
 		{
 			int k;
 
-			k = i - 1;
-			//i = 0;
-			// while (i < k)
-			// 	waitpid(pid[i++], NULL, 0);
+			k = g_env.cmd_count - 1;
 			waitpid(g_env.pid[k], &g_env.status, 0);
-			 i = 0;
-			while (i < k)
-				kill(g_env.pid[i++], SIGKILL);
 			close_pipes(pipes, g_env.cmd_count);
 			i = 0;
 			while (i < k)
 				waitpid(g_env.pid[i++], NULL, 0);
-			
-			if (WIFEXITED(g_env.status))
+			if (WIFSIGNALED(g_env.status))
+				g_env.status = WTERMSIG(g_env.status) + 128;
+			else if (WIFEXITED(g_env.status))
 				g_env.status = WEXITSTATUS(g_env.status);
 			else
 				g_env.status = 1;

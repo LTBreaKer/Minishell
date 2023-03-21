@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 10:19:22 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/18 16:25:36 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/19 18:44:50 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,7 @@ char	*go_xpnd(t_lex *g, char *s, int idx)
 		len = ft_strlen(value);
 		ret_len = ft_strlen(s) - 2 + len;
 		ret = malloc (sizeof(char) * (ret_len + 1));
+		ret[ret_len] = '\0';
 		while (i < dol - 1)
 		{
 			ret[i] = s[i];

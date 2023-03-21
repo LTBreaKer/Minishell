@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 02:04:12 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/11 22:54:34 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/21 18:19:37 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,16 @@ char	**get_var(char *var)
 	return (tmp);
 }
 
+void	free_double(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		free(str[i++]);
+	free(str);
+}
+
 int	ft_check_name(char *var)
 {
 	char	**tmp;
@@ -64,7 +74,7 @@ int	ft_check_name(char *var)
 	tmp = get_var(var);
 	if (ft_isdigit(tmp[0][0]))
 		return (printf("minishell: export: `%s': not a valid identifier\n",
-				tmp[0]), 1);
+				tmp[0]), free_double(tmp), 1);
 	while (tmp[0][i])
 	{
 		if (i == ft_strlen(tmp[0]) - 1 && tmp[0][i] == '+'
@@ -73,7 +83,7 @@ int	ft_check_name(char *var)
 				break;
 		if (!ft_isalnum(tmp[0][i]) && tmp[0][i] != '_')
 			return (printf("minishell: export: `%s': not a valid identifier\n",
-					tmp[0]), 1);
+					tmp[0]), free_double(tmp), 1);
 		i++;
 	}
 	i = 0;
@@ -95,7 +105,7 @@ void	ft_export_help(char *var)
 	i = 0;
 	check = 0;
 	if (ft_check_name(var) == 1)
-		return ;
+		return ((void)(g_env.status = 1));
 	tmp = g_env.env;
 	tmp3 = g_env.export;
 	pwd = getcwd(NULL, 0);
@@ -127,12 +137,12 @@ void	ft_export_help(char *var)
 			if (!ft_strcmp2(tmp->var, tmp2[0]))
 			{
 				if (check == 1)
-					tmp->value = ft_strjoin1(tmp->value, ft_trim(tmp2[1]));
+					tmp->value = ft_strjoin1(tmp->value, ft_strdup(tmp2[1]));
 				else
 				{
 					if (tmp->value != NULL)
 						free(tmp->value);
-					tmp->value = ft_trim(tmp2[1]);
+					tmp->value = ft_strdup(tmp2[1]);
 				}
 				while (tmp2[i])
 					free(tmp2[i++]);

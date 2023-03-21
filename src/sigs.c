@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/15 18:17:54 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/18 16:18:00 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/21 18:38:19 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@ void	sigint_handler(int sig)
 	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
+	if (g_env.h_id)
+	{
+		kill(g_env.h_id, SIGINT);
+	}
 	if (g_env.pid)
 	{
 		while (g_env.pid[i])
@@ -36,7 +40,18 @@ void	sigint_handler(int sig)
 void				sigquit_handler(int sig)
 {
 	(void)sig;
-	rl_replace_line("", 0);
+	int i;
+
+	i = 0;
+	//rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
+	if (g_env.pid)
+	{
+		while (g_env.pid[i])
+		{
+			kill(g_env.pid[i], SIGQUIT);
+			i++;
+		}
+	}
 }
