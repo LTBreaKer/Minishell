@@ -6,13 +6,13 @@
 /*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 07:35:30 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/15 17:25:29 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/20 09:48:34 by rel-mham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	free_sub_split(char **splited)
+void	free_split(char **splited)
 {
 	int	i;
 

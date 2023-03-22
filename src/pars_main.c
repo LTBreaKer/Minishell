@@ -6,11 +6,40 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:54:13 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/21 18:05:10 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/22 20:34:01 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	doconly(t_lex *g, t_cmd **lst)
+{
+	t_cmd	*new;
+	char	*tmp;
+	int	i;
+
+	i = 0;
+	g->full_heredoc = NULL;
+	if (i < g->idx_stx)
+	{
+		g->full_heredoc = ft_strdup("");
+		new = ft_lstfinalnew();
+	}
+	while (i < g->idx_stx)
+	{
+		if (!ft_strcmp(g->splited2[i], "<<"))
+		{
+			i++;
+			tmp = g->splited2[i];
+			g->splited2[i] = clean_quotes2(g->splited2[i]);
+			free(tmp);
+			g->full_heredoc = ft_strjoin3(g->full_heredoc, g->splited2[i]);
+			g->full_heredoc = ft_strjoin3(g->full_heredoc, " ");	
+		}
+		i++;
+	}
+	clone_top(g, new, lst);
+}
 
 void	freee_sub_split(char **splited)
 {
@@ -64,9 +93,10 @@ int	main(int ac, char **av, char **envp)
 			if ((err = syntax_check(&g)) != NULL)
 			{
 				printf("minishell: syntax error near unexpected token `%s\'\n", err);
+				g_env.status = 258;
+				doconly(&g, &lst_final);
 				freee_sub_split(g.splited2);
 				//freee_sub_split(g.splited1);
-				g_env.status = 258;
 			}
 			else
 			{
@@ -118,6 +148,7 @@ int	main(int ac, char **av, char **envp)
 			ft_execute(lst_final, envp));
 		while (lst_final)
 		{
+			
 			int		j;
 			if (lst_final->args)
 			{

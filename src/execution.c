@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:25:21 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/21 18:52:53 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/22 20:43:16 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,21 @@ int	**make_pipes(int cmd_count)
 	return (pipes);
 }
 
+void	close_pipes2(int **pipes, int cmd_count)
+{
+	int	i;
+
+	i = 0;
+	if (!pipes)
+		return ;
+	while (i < cmd_count - 1)
+	{
+		close(pipes[i][0]);
+		close(pipes[i][1]);
+		free(pipes[i]);
+		i++;
+	}
+}
 void	close_pipes(int **pipes, int cmd_count)
 {
 	int	i;
@@ -161,7 +176,7 @@ void	ft_closep(t_cmd *tmp, int **pipes, int i)
 				{
 					close(tmp->herepipe[0]);
 					close(tmp->herepipe[1]);
-					free(tmp->herepipe);
+					//free(tmp->herepipe);
 				}
 				if (i == 0)
 				{
@@ -203,19 +218,22 @@ int	ft_execute(t_cmd *cmd, char **envp)
 	g_env.pid = ft_calloc(sizeof(int) , g_env.cmd_count);
 	if (!g_env.pid)
 		return (perror("malloc"), 1);
-	
 	if (heredoc(cmd))
 		return (1);
 	while (tmp)
 	{
 		if (!tmp->args)
 		{
-			ft_putstr_fd("i = ", 2);
-			ft_putnbr_fd(i, 2);
-			ft_putstr_fd("\n", 2);
 			ft_closep(tmp, pipes, i);
 			i++;
 			tmp = tmp->next;
+			continue;
+		}
+		if ((cmd->in == -1 || cmd->out == -1) && cmd->next == NULL)
+		{
+			i++;
+			tmp = tmp->next;
+			g_env.status = 1;
 			continue;
 		}
 		if (cmd->args && ft_strncmp(tmp->args[0], "exit", 4) == 0
@@ -231,6 +249,7 @@ int	ft_execute(t_cmd *cmd, char **envp)
 		}
 		else if (cmd->args && ft_strncmp(cmd->args[0], "export", 6) == 0 && cmd->args[0][6] == '\0' && cmd->next == NULL)
 		{
+			write(2, "export: \n", 9);
 			ft_export(cmd->args);
 			tmp = tmp->next;
 		}
@@ -256,7 +275,7 @@ int	ft_execute(t_cmd *cmd, char **envp)
 				if (i == 0)
 				{
 					if (tmp->next)
-						(dup2(pipes[i][1], 1), close(pipes[i][1]), close(pipes[i][0]));
+						(dup2(pipes[i][1], 1), close(pipes[i][1]), close(pipes[i][0]), close_pipes2(pipes, g_env.cmd_count));
 					if (tmp->in != -2)
 						(dup2(tmp->in, 0), close(tmp->in));
 					if (tmp->out != -2)
@@ -267,6 +286,7 @@ int	ft_execute(t_cmd *cmd, char **envp)
 					close(pipes[i - 1][1]);
 					dup2(pipes[i - 1][0], 0);
 					close(pipes[i - 1][0]);
+					close_pipes2(pipes, g_env.cmd_count);
 					if (tmp->out != -2)
 						(dup2(tmp->out, 1), close(tmp->out));
 					if (tmp->in != -2)
@@ -278,7 +298,7 @@ int	ft_execute(t_cmd *cmd, char **envp)
 					dup2(pipes[i - 1][0], 0);
 					close(pipes[i - 1][0]);
 					if (tmp->next)
-						(dup2(pipes[i][1], 1), close(pipes[i][1]), close(pipes[i][0]));
+						(dup2(pipes[i][1], 1), close(pipes[i][1]), close(pipes[i][0]), close_pipes2(pipes, g_env.cmd_count));
 					if (tmp->in != -2)
 						(dup2(tmp->in, 0), close(tmp->in));
 					if (tmp->out != -2)

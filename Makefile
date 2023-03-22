@@ -19,7 +19,6 @@ OB_PATH = ./obj/
 INCLUDE = -I ./includes
 
 SR =	echo.c		\
-			test.c		\
 			pwd.c			\
 			cd.c			\
 			env.c			\
@@ -29,19 +28,24 @@ SR =	echo.c		\
 			err.c			\
 			exit.c		\
 			heredoc.c	\
+			sigs.c		\
 			execution.c	\
 			here_expnd.c	\
-			sigs.c		\
 			get_next_line.c	\
 			get_next_line_utils.c	\
 			pars_fill_list.c	\
 			pars_flist_utils.c	\
+			pars_open_files.c \
+			pars_ofiles_utils.c \
 			pars_flist_stack.c	\
 			pars_lexer.c	\
 			pars_lexer_utils.c	\
 			pars_stack_func.c	\
 			pars_syntax_error.c	\
+			pars_syntax_utils.c \
 			pars_expander.c	\
+			pars_expander_utils.c \
+			pars_expander_cases.c \
 			pars_main.c	\
 			pars_qcleaner.c \
 			pars_clone_qcleaner.c \

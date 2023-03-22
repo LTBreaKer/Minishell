@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 15:01:31 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/20 17:49:43 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/22 20:29:45 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include <fcntl.h>
 # include <readline/history.h>
 # include <readline/readline.h>
-//# include "/Users/aharrass/goinfre/homebrew/opt/readline/include/readline/readline.h"
 # include <signal.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -36,9 +35,14 @@ typedef struct s_stack
 
 typedef struct s_lex
 {
+	char			*deleted;
+	char			**splited2;
+	char			**sub_split;
+	char			*line;
 	int				i;
 	int				j;
 	int				k;
+	int				dol;
 	int				idx;
 	int				space_exist;
 	int				here;
@@ -46,18 +50,16 @@ typedef struct s_lex
 	int				sq;
 	int				dq;
 	int				id;
-	char			*deleted;
-	char			**splited2;
-	char			**sub_split;
-	char			*line;
 	int				ambg;
+	char			*target;
+	char			*value;
 	char			*full_cmd;
 	char			*full_heredoc;
 	char			*new_line_tmp;
 	char			*new_line_join;
 	char			*tmp;
+	int				idx_stx;
 }					t_lex;
-
 //----------------------------------//
 
 typedef struct s_envp
@@ -81,6 +83,7 @@ struct				s_env
 	int				*pid;
 	int				h_id;
 	int				cmd_count;
+	char			*line;	
 };
 
 typedef struct s_cmd
@@ -130,11 +133,10 @@ char				*here_expand(char *s);
 //-----------------PARSING-----------------//
 
 void				make_env(char **envp);
-void				free_sub_split(char **splited);
+void				free_split(char **splited);
 char				*ft_get_value(char *var);
 int					lex(t_lex *g);
 char				*lst_to_str(t_stack *lst);
-void				ft_transfert(t_lex *g);
 int					quotes_check(t_lex *g);
 char				*syntax_check(t_lex *g);
 int					ft_lstsize(t_stack *lst);
@@ -148,11 +150,35 @@ void				clean_me(t_lex *g, char **args);
 int					check_dash_n(char *str);
 t_cmd				*ft_lstfinalnew(void);
 void				ft_lstadd_backfinal(t_cmd **env, t_cmd *new);
-void				fill_lr(t_lex *g, t_cmd *new);
-void				fill_rr(t_lex *g, t_cmd *new);
+void				fill_in(t_lex *g, t_cmd *new);
+void				open_in(t_lex *g, t_cmd *new);
+void				fill_out(t_lex *g, t_cmd *new);
+void				open_out(t_lex *g, t_cmd *new, char **str);
 void				fill_append(t_lex *g, t_cmd *new);
 void				fill_heredoc(t_lex *g, t_cmd *new);
 int					ambig_check(char c, char *s);
+void				quotes_check_helper(t_lex *g);
+char				*red_syntax_helper3(t_lex *g, int i);
+char				*red_syntax_helper2(t_lex *g);
+void				red_syntax_helper(t_lex *g);
+char				*pipe_syntax_helper(t_lex *g);
 char				*clean_quotes(t_lex *g, char *s);
 char				*clean_quotes2(char *s);
+void				trimer(t_lex *g);
+void				f_mbig(t_lex *g, t_cmd *new, int i);
+void				ftlist_helper(t_lex *g, t_cmd *new);
+void				fill_args_helper(t_lex *g, t_cmd *new);
+void				fill_args_helper2(t_lex *g);
+char				*xpanterrogation(char *s, int dol);
+char				*dol_dol(char *target, char *s, int dol);
+char				*null_val(char *target, char *s, int dol, int len);
+char				*normal_case(char *value, char *s, int dol, int len);
+char				*dol_zero(char *target, t_lex *g, char *s);
+int					qchecker(char *s, char c, int start, int end);
+int					xpnd_help(char *s, int i, int *index, char c);
+int					xpnd_in_loop(char *s, int i, int *index);
+char				*get_target(char *s, int idx);
+void				shifting(char **args, int j);
+char				*put_stx_idx(t_lex *g, char *ret, int i);
+void				clone_top(t_lex *g, t_cmd *new, t_cmd **lst);
 #endif
