@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:54:13 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/22 20:34:01 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/23 00:39:38 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,6 +150,8 @@ int	main(int ac, char **av, char **envp)
 		{
 			
 			int		j;
+			if (lst_final->herepipe)
+				free(lst_final->herepipe);
 			if (lst_final->args)
 			{
 				j = 0;

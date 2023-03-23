@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 15:01:31 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/22 20:29:45 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/22 23:24:37 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ struct				s_env
 	int				*pid;
 	int				h_id;
 	int				cmd_count;
-	char			*line;	
+	char			*line;
 };
 
 typedef struct s_cmd
@@ -129,6 +129,7 @@ int					ft_execute(t_cmd *cmd, char **envp);
 void				sigint_handler(int sig);
 void				sigquit_handler(int sig);
 char				*here_expand(char *s);
+void				free_double(char **str);
 
 //-----------------PARSING-----------------//
 

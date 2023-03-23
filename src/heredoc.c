@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 17:24:37 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/22 20:34:48 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/23 00:38:45 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,19 +27,24 @@ int	arr_size(char **arr)
 void	make_heredoc(t_cmd *cmd)
 {
 	int	i;
+	t_cmd	*tmp;
 
+	tmp = cmd;
 	i = 0;
-	cmd->herepipe = NULL;
-	if (arr_size(cmd->heredoc))
+	while (tmp)
 	{
-		cmd->herepipe = malloc(sizeof(int) * 2);
-		if (!cmd->herepipe)
-			return (perror("malloc"));
-		if (pipe(cmd->herepipe) == -1)
-			return (perror("pipe"));
+		tmp->herepipe = NULL;
+		if (arr_size(tmp->heredoc))
+		{
+			tmp->herepipe = malloc(sizeof(int) * 2);
+			printf("herepipe: %p\n", tmp->herepipe);
+			if (!tmp->herepipe)
+				return (perror("malloc"));
+			if (pipe(tmp->herepipe) == -1)
+				return (perror("pipe"));
+		}
+		tmp = tmp->next;
 	}
-	else
-		cmd->herepipe = NULL;
 	return ;
 }
 
@@ -51,15 +56,18 @@ int	heredoc(t_cmd *cmd)
 	struct termios	term2;
 
 	i = 0;
+	
 	tmp = cmd;
 	g_env.line = NULL;
 	tcgetattr(0, &term);
 	term2 = term;
 	term.c_lflag &= ~ISIG;
 	term.c_lflag &= ~ECHOCTL;
+	make_heredoc(tmp);
 	while (tmp)
 	{
-		make_heredoc(tmp);
+		write(2, "here\n", 5);
+		
 		if (tmp->heredoc)
 		{
 			g_env.h_id = fork();
@@ -102,9 +110,7 @@ int	heredoc(t_cmd *cmd)
 				{
 					g_env.status = 1;
 					return (1);
-				}
-				else
-					return(0);
+				}	
 			}
 		}
 		tmp = tmp->next;

@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:25:21 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/22 20:43:16 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/23 00:45:12 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,7 +176,6 @@ void	ft_closep(t_cmd *tmp, int **pipes, int i)
 				{
 					close(tmp->herepipe[0]);
 					close(tmp->herepipe[1]);
-					//free(tmp->herepipe);
 				}
 				if (i == 0)
 				{
@@ -219,7 +218,17 @@ int	ft_execute(t_cmd *cmd, char **envp)
 	if (!g_env.pid)
 		return (perror("malloc"), 1);
 	if (heredoc(cmd))
+	{
+		// while (tmp)
+		// {
+		// 	printf("heredoc added %p\n", tmp->herepipe);
+		// 	tmp = tmp->next;
+		// }
+		if (pipes)
+			close_pipes(pipes, g_env.cmd_count);
+		(free(g_env.pid));
 		return (1);
+	}
 	while (tmp)
 	{
 		if (!tmp->args)
@@ -368,6 +377,8 @@ int	ft_execute(t_cmd *cmd, char **envp)
 	// 	while (pipes[i])
 	// 		free(pipes[i++]);
 	//free(pipes);
+	if (pipes)
+			close_pipes(pipes, g_env.cmd_count);
 	return (0);
 }
 
