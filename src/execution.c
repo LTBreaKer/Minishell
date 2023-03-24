@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:25:21 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/24 00:56:02 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/24 20:04:21 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ int	built_in(t_cmd *cmd)
 		if (ft_strncmp(cmd->args[0], "echo", 4) == 0 && cmd->args[0][4] == '\0')
 			return (ft_echo(cmd), 0);
 		else if (ft_strncmp(cmd->args[0], "cd", 2) == 0 && cmd->args[0][2] == '\0')
-			return (ft_cd(cmd->args[1]), 0);
+			return (ft_cd(cmd->args[1], 1), 0);
 		else if (ft_strncmp(cmd->args[0], "pwd", 3) == 0 && cmd->args[0][3] == '\0')
 			return (ft_pwd(), 0);
 		else if (ft_strncmp(cmd->args[0], "export", 6) == 0
@@ -162,7 +162,7 @@ int	built_in(t_cmd *cmd)
 			return (ft_env(), 0);
 		else if (ft_strncmp(cmd->args[0], "exit", 4) == 0
 				&& cmd->args[0][4] == '\0')
-			return(ft_exit(cmd->args, 0), 1);
+			return(ft_exit(cmd->args, 1), 1);
 	}
 	return (1);
 }
@@ -239,15 +239,16 @@ int	ft_execute(t_cmd *cmd, char **envp)
 			g_env.status = 1;
 			continue;
 		}
-		if (cmd->args && ft_strncmp(tmp->args[0], "exit", 4) == 0
-					&& tmp->args[0][4] == '\0' && cmd->next == NULL)
+		if (cmd->args && ft_strncmp(cmd->args[0], "exit", 4) == 0
+					&& cmd->args[0][4] == '\0' && cmd->next == NULL)
 		{
+					write(2, "test\n", 5);
 					ft_exit(tmp->args, 0);
 					tmp = tmp->next;
 		}
 		else if (cmd->args && ft_strncmp(cmd->args[0], "cd", 2) == 0 && cmd->args[0][2] == '\0' && cmd->next == NULL)
 		{
-			ft_cd(cmd->args[1]);
+			ft_cd(cmd->args[1], 0);
 			tmp = tmp->next;
 		}
 		else if (cmd->args && ft_strncmp(cmd->args[0], "export", 6) == 0 && cmd->args[0][6] == '\0' && cmd->next == NULL)

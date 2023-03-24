@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 15:01:31 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/24 02:00:21 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/24 20:03:22 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ struct s_env		g_env;
 void				rl_replace_line(const char *s, int clear_undo);
 void				ft_print(void);
 void				ft_pwd(void);
-int					ft_cd(char *dir);
+int					ft_cd(char *dir, int check);
 void				ft_env(void);
 void				ft_echo(t_cmd *cmd);
 void				ft_exit(char **args, int check);
