@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 16:25:21 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/23 00:45:12 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/24 00:56:02 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ int	**make_pipes(int cmd_count)
 			return (perror("pipe"), NULL);
 		i++;
 	}
-	//close(pipes[0][0]);
 	return (pipes);
 }
 
@@ -219,11 +218,6 @@ int	ft_execute(t_cmd *cmd, char **envp)
 		return (perror("malloc"), 1);
 	if (heredoc(cmd))
 	{
-		// while (tmp)
-		// {
-		// 	printf("heredoc added %p\n", tmp->herepipe);
-		// 	tmp = tmp->next;
-		// }
 		if (pipes)
 			close_pipes(pipes, g_env.cmd_count);
 		(free(g_env.pid));
@@ -258,7 +252,6 @@ int	ft_execute(t_cmd *cmd, char **envp)
 		}
 		else if (cmd->args && ft_strncmp(cmd->args[0], "export", 6) == 0 && cmd->args[0][6] == '\0' && cmd->next == NULL)
 		{
-			write(2, "export: \n", 9);
 			ft_export(cmd->args);
 			tmp = tmp->next;
 		}
@@ -284,7 +277,7 @@ int	ft_execute(t_cmd *cmd, char **envp)
 				if (i == 0)
 				{
 					if (tmp->next)
-						(dup2(pipes[i][1], 1), close(pipes[i][1]), close(pipes[i][0]), close_pipes2(pipes, g_env.cmd_count));
+						(dup2(pipes[i][1], 1), close_pipes2(pipes, g_env.cmd_count));
 					if (tmp->in != -2)
 						(dup2(tmp->in, 0), close(tmp->in));
 					if (tmp->out != -2)
@@ -319,8 +312,6 @@ int	ft_execute(t_cmd *cmd, char **envp)
 					close(tmp->herepipe[0]);
 					close(tmp->herepipe[1]);
 				}
-					
-				//check command
 				if ((direc = opendir(tmp->args[0])) != NULL)
 				{
 					closedir(direc);
@@ -355,10 +346,8 @@ int	ft_execute(t_cmd *cmd, char **envp)
 		if (s)
 		{
 			int k;
-
 			k = g_env.cmd_count - 1;
 			waitpid(g_env.pid[k], &g_env.status, 0);
-			close_pipes(pipes, g_env.cmd_count);
 			i = 0;
 			while (i < k)
 				waitpid(g_env.pid[i++], NULL, 0);
@@ -372,22 +361,7 @@ int	ft_execute(t_cmd *cmd, char **envp)
 	}
 	if (g_env.pid)
 		free(g_env.pid);
-	i = 0;
-	// if (g_env.cmd_count > 1)
-	// 	while (pipes[i])
-	// 		free(pipes[i++]);
-	//free(pipes);
 	if (pipes)
 			close_pipes(pipes, g_env.cmd_count);
 	return (0);
 }
-
-// int	main(int ac, char **av, char **envp)
-// {
-// 	(void)ac;
-// 	(void)av;
-// 	g_env.export = NULL;
-// 	make_env(envp);
-// 	printf("----------------\n");
-// 	return (0);
-// }

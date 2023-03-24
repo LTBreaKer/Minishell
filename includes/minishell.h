@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 15:01:31 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/22 23:24:37 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/24 02:00:21 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,10 @@ typedef struct s_lex
 	char			*full_cmd;
 	char			*full_heredoc;
 	char			*new_line_tmp;
-	char			*new_line_join;
 	char			*tmp;
 	int				idx_stx;
+	int				lx;
+	char			*err;
 }					t_lex;
 //----------------------------------//
 
@@ -130,6 +131,7 @@ void				sigint_handler(int sig);
 void				sigquit_handler(int sig);
 char				*here_expand(char *s);
 void				free_double(char **str);
+int					arr_size(char **arr);
 
 //-----------------PARSING-----------------//
 

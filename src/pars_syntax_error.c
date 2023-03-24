@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_syntax_error.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 19:52:19 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/22 18:52:18 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/24 00:28:41 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*pipe_syntax(t_lex *g)
 	if (!ft_strcmp(g->splited2[i], "|"))
 		return (put_stx_idx(g, "|", i));
 	else if (!ft_strcmp(g->splited2[len], "|"))
-		return (put_stx_idx(g, "|", i));
+		return (put_stx_idx(g, "|", len));
 	if ((!ft_strcmp(g->splited2[i], "<") || !ft_strcmp(g->splited2[i], "<<")
 			|| !ft_strcmp(g->splited2[i], ">>")) && (!ft_strcmp(g->splited2[i
 					+ 1], "|")))

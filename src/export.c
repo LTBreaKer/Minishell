@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 02:04:12 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/21 18:19:37 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/23 19:59:54 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,17 +73,19 @@ int	ft_check_name(char *var)
 		return (0);
 	tmp = get_var(var);
 	if (ft_isdigit(tmp[0][0]))
-		return (printf("minishell: export: `%s': not a valid identifier\n",
-				tmp[0]), free_double(tmp), 1);
+		return (ft_putstr_fd("minishell: export: `", 2), ft_putstr_fd(tmp[0],
+				2), ft_putstr_fd("': not a valid identifier\n", 2),
+				free_double(tmp), 1);
 	while (tmp[0][i])
 	{
 		if (i == ft_strlen(tmp[0]) - 1 && tmp[0][i] == '+'
 			&& ft_strlen(tmp[0]) < ft_strlen(var)
 			&& var[ft_strlen(tmp[0])] == '=')
-				break;
+			break ;
 		if (!ft_isalnum(tmp[0][i]) && tmp[0][i] != '_')
-			return (printf("minishell: export: `%s': not a valid identifier\n",
-					tmp[0]), free_double(tmp), 1);
+			return (ft_putstr_fd("minishell: export: `", 2), ft_putstr_fd(tmp[0], 2),
+				ft_putstr_fd("': not a valid identifier\n", 2),
+					free_double(tmp), 1);
 		i++;
 	}
 	i = 0;
@@ -172,7 +174,7 @@ void	ft_export_help(char *var)
 
 void	ft_export(char **args)
 {
-	int		i;
+	int	i;
 
 	i = 1;
 	if (args[1] == NULL)
