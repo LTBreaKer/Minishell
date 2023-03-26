@@ -23,6 +23,7 @@ SR =	echo.c		\
 			cd.c			\
 			env.c			\
 			export.c	\
+			export_utils.c	\
 			unset.c		\
 			ft_lst.c	\
 			ft_lst2.c	\
@@ -31,6 +32,9 @@ SR =	echo.c		\
 			heredoc.c	\
 			sigs.c		\
 			execution.c	\
+			execution_utlis.c	\
+			execution_utils2.c	\
+			execution_utils3.c	\
 			here_expnd.c	\
 			get_next_line.c	\
 			get_next_line_utils.c	\

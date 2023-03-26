@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 15:01:31 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/24 20:03:22 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/26 02:13:15 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,16 @@ struct s_env		g_env;
 //extern struct s_env	g_env;
 
 void				rl_replace_line(const char *s, int clear_undo);
-void				ft_print(void);
+void				dup_handler(int i, int **pipes, t_cmd *tmp);
+int					built_in_parent(t_cmd *cmd);
+int					check_null_cmd(t_cmd **tmp, int *i, int **pipes);
+void				ft_closep(t_cmd *tmp, int **pipes, int i);
+int					built_in(t_cmd *cmd);
+int					**make_pipes(int cmd_count);
+char				*get_cmd(t_cmd *cmd);
+void				close_pipes(int **pipes, int cmd_count);
+void				close_pipes2(int **pipes, int cmd_count);
+void				make_env(char **envp);
 void				ft_pwd(void);
 int					ft_cd(char *dir, int check);
 void				ft_env(void);
@@ -112,12 +121,11 @@ void				ft_exit(char **args, int check);
 int					ft_unset(char **args);
 t_env				*ft_lstnew(char *var, int f);
 t_env				*ft_lstadd_back(t_env **env, t_env *new);
-void				ft_export(char **var);
+void				ft_export(char **var, int check);
 t_export			*ft_lstnew_export(char *var);
 void				ft_lstadd_back_export(t_export **export, t_export *new);
 void				ft_lstadd_after_last(t_env **env, t_env *new);
 void				ft_lstremove(t_export **export, char *var);
-char				*ft_trim(char *str);
 int					ft_change_elem(char *var, char *value);
 void				ft_lstadd_after_last(t_env **env, t_env *new);
 char				*ft_get_value(char *var);
@@ -130,8 +138,10 @@ int					ft_execute(t_cmd *cmd, char **envp);
 void				sigint_handler(int sig);
 void				sigquit_handler(int sig);
 char				*here_expand(char *s);
-void				free_double(char **str);
 int					arr_size(char **arr);
+char				**get_var(char *var);
+int					initial_check(char **tmp, char *var);
+void				print_err(char *str1, char *str2, char *str3);
 
 //-----------------PARSING-----------------//
 

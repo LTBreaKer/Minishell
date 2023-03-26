@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 18:06:02 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/24 20:20:25 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/24 20:41:17 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ int	set_dir(char **dir, int check)
 		return (1);
 	}
 	if (!**dir)
+	{
+		free(*dir);
 		*dir = ft_strdup(ft_get_value("PWD"));
+	}
 	if ((**dir == '~' && *(*dir + 1) == 0))
 	{
 		free(*dir);
@@ -43,7 +46,7 @@ int	cd_helper(char **pwd, int check, char **dir)
 	{
 		ft_putstr_fd("cd: no such file or directory: ", 2);
 		g_env.status = 1;
-		(ft_putendl_fd(*dir, 2), free(pwd), free(*dir));
+		(ft_putendl_fd(*dir, 2), free(*pwd), free(*dir));
 		if (check == 1)
 			exit(g_env.status);
 		return (1);

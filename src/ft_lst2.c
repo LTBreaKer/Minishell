@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 01:26:16 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/24 01:30:02 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/24 22:24:41 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ t_env	*ft_lstnew(char *var, int f)
 		tmp[0][ft_strlen(tmp[0]) - 1] = '\0';
 	new->var = tmp[0];
 	new->value = ft_strdup(tmp[1]);
+	if (new->value == NULL)
+		new->value = ft_strdup("");
 	new->next = NULL;
 	if (tmp[1])
 		free(tmp[1]);

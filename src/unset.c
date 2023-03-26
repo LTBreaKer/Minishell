@@ -6,11 +6,18 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 10:23:55 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/21 16:01:51 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/25 20:11:11 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+void	print_err(char *str1, char *str2, char *str3)
+{
+	ft_putstr_fd(str1, 2);
+	ft_putstr_fd(str2, 2);
+	ft_putstr_fd(str3, 2);
+}
 
 int	ft_check_name1(char *var)
 {
@@ -19,17 +26,17 @@ int	ft_check_name1(char *var)
 	i = 1;
 	if (var == NULL)
 		return (0);
-	if (ft_isdigit(var[0]))
-		return (printf("minishell: unset: `%s': not a valid identifier\n",
-				var), 1);
+	if (ft_isdigit(var[0]) || (!ft_isalnum(var[0]) && var[0] != '_'))
+		return (print_err("minishell: unset: `", var,
+				"': not a valid identifier\n"), 1);
 	while (var[i])
 	{
 		if (i == ft_strlen(var) - 1 && var[i] == '+'
 			&& ft_strlen(var) < ft_strlen(var) && var[ft_strlen(var)] == '=')
 			return (0);
 		if (!ft_isalnum(var[i]) && var[i] != '_')
-			return (printf("minishell: unset: `%s': not a valid identifier\n",
-					var), 1);
+			return (print_err("minishell: unset: `", var,
+					"': not a valid identifier\n"), 1);
 		i++;
 	}
 	return (0);
@@ -37,7 +44,7 @@ int	ft_check_name1(char *var)
 
 int	ft_unset(char **args)
 {
-	int		i;
+	int	i;
 
 	i = 1;
 	if (args[1] == NULL)

@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/21 12:54:13 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/24 01:13:53 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/24 23:08:18 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,13 @@ int	main(int ac, char **av, char **envp)
 				// 	i = 0;
 				// 	if (!tmp->heredoc)
 				// 				printf("{her doc : %s}\n}",
-										// (char *)tmp->heredoc);
+				// 						(char *)tmp->heredoc);
 				// 	if (tmp->heredoc)
 				// 	{
 				// 		while (tmp->heredoc[i])
 				// 		{
 				// 			printf("{here doc %d : %s}\n", i,
-									// (char *)tmp->heredoc[i]);
+				// 					(char *)tmp->heredoc[i]);
 				// 			i++;
 				// 		}
 				// 	}
