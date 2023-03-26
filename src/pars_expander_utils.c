@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_expander_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 21:27:53 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/20 21:29:28 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/26 17:41:05 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,15 @@ char	*get_target(char *s, int idx)
 	ret = malloc (sizeof(char) * (len + 1));
 	ret[len] = '\0';
 	idx = idx - len;
-	while (i < len )
+	while (i < len)
 		ret[i++] = s[idx++];
 	return (ret);
 }
 
 void	shifting(char **args, int j)
 {
-	int g;
-	int i;
+	int	g;
+	int	i;
 
 	i = 0;
 	g = j;

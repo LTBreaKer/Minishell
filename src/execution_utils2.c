@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 02:09:26 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/26 02:10:38 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/26 17:29:50 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	built_in(t_cmd *cmd)
 			return (ft_export(cmd->args, 1), 0);
 		else if (ft_strncmp(cmd->args[0], "unset", 5) == 0
 			&& cmd->args[0][5] == '\0')
-			return (ft_unset(cmd->args), 0);
+			return (ft_unset(cmd->args, 1), 0);
 		else if (ft_strncmp(cmd->args[0], "env", 3) == 0
 			&& cmd->args[0][3] == '\0')
 			return (ft_env(), 0);
@@ -123,6 +123,6 @@ int	built_in_parent(t_cmd *cmd)
 		return (ft_export(cmd->args, 0), 1);
 	else if (cmd->args && ft_strncmp(cmd->args[0], "unset", 5) == 0
 		&& cmd->args[0][5] == '\0' && cmd->next == NULL)
-		return (ft_unset(cmd->args), 1);
+		return (ft_unset(cmd->args, 0), 1);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_expander_cases.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 21:24:09 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/20 21:24:57 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/26 17:40:40 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*xpanterrogation(char *s, int dol)
 	ft_strlcpy(ret, s, dol);
 	ft_strlcpy(ret + dol - 1, value, ft_strlen(value) + 1);
 	ft_strlcpy(ret + dol - 1 + ft_strlen(value), s + dol + 1, ft_strlen(s) - dol
-			+ 1);
+		+ 1);
 	free(value);
 	return (ret);
 }
@@ -69,7 +69,7 @@ char	*normal_case(char *value, char *s, int dol, int len)
 	ft_strlcpy(ret, s, dol);
 	ft_strlcpy(ret + dol - 1, value, ft_strlen(value) + 1);
 	ft_strlcpy(ret + dol - 1 + ft_strlen(value), s + dol + len, ft_strlen(s)
-			- dol - len + 1);
+		- dol - len + 1);
 	return (ret);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_open_files.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 11:56:58 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/21 21:13:47 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/26 17:42:25 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	fill_append(t_lex *g, t_cmd *new)
 
 void	fill_heredoc(t_lex *g, t_cmd *new)
 {
-	char *tmp;
+	char	*tmp;
 
 	new->wf = 1;
 	g->i++;
@@ -52,9 +52,8 @@ void	fill_in(t_lex *g, t_cmd *new)
 {
 	if (new->in != -2)
 		close(new->in);
-	// else
-	// {
-	if (g->deleted[g->i + 1] == 'f' || !ambig_check(g->deleted[g->i + 1], g->splited2[g->i + 1]))
+	if (g->deleted[g->i + 1] == 'f'
+		|| !ambig_check(g->deleted[g->i + 1], g->splited2[g->i + 1]))
 		f_mbig(g, new, 0);
 	else if (!ft_strcmp(g->splited2[g->i + 1], ">"))
 	{
@@ -64,9 +63,8 @@ void	fill_in(t_lex *g, t_cmd *new)
 	else
 	{
 		if (new->out != -1 && new->in != -1)
-			open_in(g, new);	
+			open_in(g, new);
 	}
-	// }
 	g->i++;
 }
 

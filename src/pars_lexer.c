@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_lexer.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 17:16:19 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/20 09:44:39 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/26 17:41:27 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	lex_helper1(t_lex *g, t_stack **lst)
 		|| g->line[g->idx] == '>')
 		add_push(lst, ' ');
 	else if (g->line[g->idx + 1] == '|' || g->line[g->idx + 1] == '<'
-			|| g->line[g->idx + 1] == '>')
+		|| g->line[g->idx + 1] == '>')
 		add_push(lst, ' ');
 }
 

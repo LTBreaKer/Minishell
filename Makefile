@@ -36,8 +36,6 @@ SR =	echo.c		\
 			execution_utils2.c	\
 			execution_utils3.c	\
 			here_expnd.c	\
-			get_next_line.c	\
-			get_next_line_utils.c	\
 			pars_fill_list.c	\
 			pars_flist_utils.c	\
 			pars_open_files.c \

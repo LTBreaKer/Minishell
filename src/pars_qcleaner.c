@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_qcleaner.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 09:34:34 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/14 13:38:58 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/26 17:42:40 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	clean_me(t_lex *g, char **args)
 	char	*clean;
 
 	if (args == NULL)
-		return;
+		return ;
 	g->j = 0;
 	while (args[g->j])
 	{

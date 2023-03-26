@@ -6,14 +6,13 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 15:01:31 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/26 02:13:15 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/26 17:43:34 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 # include "../libft/libft.h"
-# include "get_next_line.h"
 # include <dirent.h>
 # include <fcntl.h>
 # include <readline/history.h>
@@ -118,7 +117,7 @@ int					ft_cd(char *dir, int check);
 void				ft_env(void);
 void				ft_echo(t_cmd *cmd);
 void				ft_exit(char **args, int check);
-int					ft_unset(char **args);
+int					ft_unset(char **args, int check);
 t_env				*ft_lstnew(char *var, int f);
 t_env				*ft_lstadd_back(t_env **env, t_env *new);
 void				ft_export(char **var, int check);

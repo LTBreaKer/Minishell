@@ -6,7 +6,7 @@
 /*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 20:12:05 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/10 10:57:00 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/26 17:43:00 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ void	add_push(t_stack **lst, char c)
 
 void	free_lst(t_stack *lst)
 {
-	t_stack *tmp;
-	
+	t_stack	*tmp;
+
 	tmp = lst;
 	while (lst)
 	{
