@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/16 17:24:37 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/24 02:01:53 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:16:26 by rel-mham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ void	heredoc_child(struct termios term, t_cmd *tmp)
 {
 	int	i;
 
+	(void)term;
 	i = 0;
 	(signal(SIGINT, SIG_DFL), signal(SIGQUIT, sigquit_handler));
 	while (tmp->heredoc[i])
 	{
-		tcsetattr(0, TCSANOW, &term);
 		g_env.line = readline("> ");
 		if (g_env.line)
 			g_env.line = ft_strjoin3(g_env.line, "\n");
@@ -74,12 +74,12 @@ int	herdoc_loop(t_cmd *tmp, struct termios term, struct termios term2)
 {
 	int	i;
 
+	(void)term2;
 	g_env.h_id = fork();
 	if (g_env.h_id == 0)
 		heredoc_child(term, tmp);
 	else
 	{
-		tcsetattr(0, TCSANOW, &term2);
 		if (g_env.line)
 			free(g_env.line);
 		waitpid(g_env.h_id, &i, 0);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utlis.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 02:06:35 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/26 02:07:38 by aharrass         ###   ########.fr       */
+/*   Updated: 2023/03/27 16:14:18 by rel-mham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ char	*get_cmd(t_cmd *cmd)
 		exit(0);
 	if (!cmd->args[0])
 		exit(0);
+	if (!cmd->args[0][0])
+		return (NULL);
 	if ((cmd->args[0][0] == '.' || cmd->args[0][0] == '/'))
 	{
 		if (access(cmd->args[0], F_OK) == 0)
