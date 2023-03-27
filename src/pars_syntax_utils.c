@@ -6,7 +6,7 @@
 /*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/20 09:57:25 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/22 18:37:28 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/27 15:05:02 by rel-mham         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,52 +32,6 @@ void	quotes_check_helper(t_lex *g)
 		if (g->line[g->id] == 34)
 			g->sq++;
 	}
-}
-
-char	*red_syntax_helper3(t_lex *g, int i)
-{
-	if ((!ft_strcmp(g->splited2[i], "<<") || !ft_strcmp(g->splited2[i], ">>"))
-		&& (!ft_strcmp(g->splited2[i - 1], "<") || !ft_strcmp(g->splited2[i
-					- 1], ">") || !ft_strcmp(g->splited2[i - 1], "<<")
-			|| !ft_strcmp(g->splited2[i - 1], ">>")))
-		return ("redirection");
-	else if ((!ft_strcmp(g->splited2[i], "<") || !ft_strcmp(g->splited2[i],
-				">")) && (!ft_strcmp(g->splited2[i - 1], "<<")
-			|| !ft_strcmp(g->splited2[i - 1], ">>")))
-		return ("redirection");
-	else if (!ft_strcmp(g->splited2[i], "<") && !ft_strcmp(g->splited2[i - 1],
-			">"))
-		return ("redirection");
-	else if ((!ft_strcmp(g->splited2[i], "<") && !ft_strcmp(g->splited2[i - 1],
-				"<")) || (!ft_strcmp(g->splited2[i], ">")
-			&& !ft_strcmp(g->splited2[i - 1], ">")))
-		return ("redirection");
-	else if (((!ft_strcmp(g->splited2[i], ">") && !ft_strcmp(g->splited2[i - 1],
-					"<")) || (!ft_strcmp(g->splited2[i], "|")
-				&& !ft_strcmp(g->splited2[i - 1], ">")))
-		&& g->space_exist == 1)
-		return ("redirection");
-	else
-		return (NULL);
-}
-
-char	*red_syntax_helper2(t_lex *g)
-{
-	char	*ret;
-	int		i;
-
-	i = ft_double_strlen(g->splited2) - 2;
-	while (i > 0)
-	{
-		ret = red_syntax_helper3(g, i);
-		if (ret)
-		{
-			g->idx_stx = i;
-			return (ret);
-		}
-		i--;
-	}
-	return (NULL);
 }
 
 void	red_syntax_helper(t_lex *g)
@@ -109,28 +63,67 @@ void	red_syntax_helper(t_lex *g)
 	}
 }
 
+int	broken_psh(t_lex *g, int i)
+{
+	if (!ft_strcmp(g->splited2[i], "|") && !ft_strcmp(g->splited2[i + 1],
+			"|"))
+		return (0);
+	else if ((!ft_strcmp(g->splited2[i], "<") || !ft_strcmp(g->splited2[i],
+				">>") || !ft_strcmp(g->splited2[i], "<<"))
+		&& (!ft_strcmp(g->splited2[i + 1], "|")))
+		return (0);
+	else if ((g->splited2[i][0] == '<' || g->splited2[i][0] == '>'
+				|| !ft_strcmp(g->splited2[i], ">>")
+				|| !ft_strcmp(g->splited2[i], "<<")) && g->splited2[i
+			+ 1][0] == '|' && (g->splited2[i + 2][0] == '<' || g->splited2[i
+				+ 2][0] == '>' || !ft_strcmp(g->splited2[i + 2], ">>")
+				|| !ft_strcmp(g->splited2[i + 2], "<<")))
+		return (0);
+	else
+		return (1);
+}
+
+int	broken_psh2(t_lex *g, int i)
+{
+	if ((!ft_strcmp(g->splited2[i], "<<") || !ft_strcmp(g->splited2[i], ">>"))
+		&& (!ft_strcmp(g->splited2[i + 1], "<") || !ft_strcmp(g->splited2[i
+					+ 1], ">") || !ft_strcmp(g->splited2[i + 1], "<<")
+			|| !ft_strcmp(g->splited2[i + 1], ">>")))
+		return (0);
+	else if ((!ft_strcmp(g->splited2[i], "<") || !ft_strcmp(g->splited2[i],
+				">")) && (!ft_strcmp(g->splited2[i + 1], "<<")
+			|| !ft_strcmp(g->splited2[i + 1], ">>")))
+		return (0);
+	else if (!ft_strcmp(g->splited2[i], ">") && !ft_strcmp(g->splited2[i + 1],
+			"<"))
+		return (0);
+	else if ((!ft_strcmp(g->splited2[i], "<") && !ft_strcmp(g->splited2[i + 1],
+				"<")) || (!ft_strcmp(g->splited2[i], ">")
+			&& !ft_strcmp(g->splited2[i + 1], ">")))
+		return (0);
+	else if (((!ft_strcmp(g->splited2[i], ">") && !ft_strcmp(g->splited2[i + 1],
+					"<")) || (!ft_strcmp(g->splited2[i], ">")
+				&& !ft_strcmp(g->splited2[i + 1], "|")))
+		&& g->space_exist == 1)
+		return (0);
+	else
+		return (1);
+}
+
 char	*pipe_syntax_helper(t_lex *g)
 {
 	int	i;
+	int	len;
 
-	i = ft_double_strlen(g->splited2) - 1;
-	while (--i > 1)
+	len = ft_double_strlen(g->splited2) - 1;
+	i = 0;
+	while (i < len && g->splited2[i])
 	{
-		if (!ft_strcmp(g->splited2[i], "|") && !ft_strcmp(g->splited2[i - 1],
-				"|"))
+		if (broken_psh(g, i) == 0)
 			return (put_stx_idx(g, "|", i));
-		else if ((!ft_strcmp(g->splited2[i - 1], "<")
-				|| !ft_strcmp(g->splited2[i - 1], ">>")
-				|| !ft_strcmp(g->splited2[i - 1], "<<"))
-			&& (!ft_strcmp(g->splited2[i], "|")))
-			return (put_stx_idx(g, "|", i));
-		else if ((g->splited2[i][0] == '<' || g->splited2[i][0] == '>'
-					|| !ft_strcmp(g->splited2[i], ">>")
-					|| !ft_strcmp(g->splited2[i], "<<")) && g->splited2[i
-				- 1][0] == '|' && (g->splited2[i - 2][0] == '<' || g->splited2[i
-					- 2][0] == '>' || !ft_strcmp(g->splited2[i - 2], ">>")
-					|| !ft_strcmp(g->splited2[i - 2], "<<")))
-			return (put_stx_idx(g, "|", i));
+		else if (broken_psh2(g, i) == 0)
+			return (put_stx_idx(g, "redirection", i));
+		i++;
 	}
 	return (NULL);
 }

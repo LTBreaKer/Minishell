@@ -4,9 +4,9 @@ CFLAGS = -Wall -Wextra -Werror -g #-fsanitize=address #-lreadline
 
 RM = rm -f
 
-LDFLAGS= -L /Users/aharrass/goinfre/homebrew/opt/readline/lib
+LDFLAGS= -L /Users/rel-mham/goinfre/homebrew/opt/readline/lib
 
-CPPFLAGS= -I /Users/aharrass/goinfre/homebrew/opt/readline/include
+CPPFLAGS= -I /Users/rel-mham/goinfre/homebrew/opt/readline/include
 
 LIBFT = ./libft
 
