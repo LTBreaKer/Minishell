@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_flist_stack.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 14:49:59 by rel-mham          #+#    #+#             */
-/*   Updated: 2023/03/16 20:42:50 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/27 17:36:38 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,22 +50,24 @@ void	ft_lstadd_backfinal(t_cmd **env, t_cmd *new)
 	tmp->next = new;
 }
 
-int	check_dash_n(char *str)
+int	check_dash_n(char *tmp)
 {
-	int	i;
+	char	*str;
+	int		i;
 
 	i = 0;
+	str = clean_quotes2(tmp);
 	if (str[i] == '-')
 		i++;
 	else
-		return (0);
+		return (free(str), 0);
 	while (str[i] == 'n')
 		i++;
 	if (str[i - 1] == 'n' && (str[i] == ' '
 			|| str[i] == '\0' || str[i] == '\t' || str[i] == '\n'))
-		return (1);
+		return (free(str), 1);
 	else
-		return (0);
+		return (free(str), 0);
 }
 
 int	ambig_check(char c, char *s)

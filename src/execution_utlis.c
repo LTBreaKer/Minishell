@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utlis.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-mham <rel-mham@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aharrass <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/26 02:06:35 by aharrass          #+#    #+#             */
-/*   Updated: 2023/03/27 16:14:18 by rel-mham         ###   ########.fr       */
+/*   Updated: 2023/03/27 18:13:25 by aharrass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,10 @@ char	*get_cmd2(char **paths, t_cmd *cmd)
 	i = 0;
 	while (paths[i])
 	{
-		cmd_path = ft_strjoin2(paths[i++], "/");
+		if (paths[i][ft_strlen(paths[i]) - 1] != '/')
+			cmd_path = ft_strjoin2(paths[i++], "/");
+		else
+			cmd_path = ft_strdup(paths[i++]);
 		cmd_path = ft_strjoin2(cmd_path, cmd->args[0]);
 		if (access(cmd_path, F_OK) == 0)
 			break ;
